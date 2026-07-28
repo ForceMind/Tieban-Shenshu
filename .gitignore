@@ -46,3 +46,6 @@ Thumbs.db
 
 # 构建产物（纯前端部署包，可由 js/ + *.html 重新打包生成）
 tieban-shenshu-cfpages.zip
+tools/dist/
+tools/node_modules/
+tools/package-lock.json

@@ -13,6 +13,8 @@
 - 📅 **流年预测** - 提供1-108岁完整流年数据
 - 🎨 **精美界面** - 传统风格的现代化Web界面
 - 🔢 **铁板核心公式** - 终局条文数 = 本命基数 + 刻干数 × 48
+- 📅 **流年公历年对照** - 流年表在虚岁旁标注对应公历年份
+- 💬 **断语现代白话** - 原条文/校正后/铁板公式三种断语均附现代白话释义
 - 🖨️ **打印支持** - 完整的打印报告功能
 
 ## 算法核心
@@ -52,10 +54,13 @@ TBOS/
 ├── index.html           # 前端主页面（输入排盘信息）
 ├── result.html          # 结果展示页面
 ├── Print.html           # 打印页面
-├── js/                  # 纯前端运行所需（部署仅需此三者 + 上述 HTML）
+├── js/                  # 纯前端运行所需（部署仅需此目录 + 上述 HTML）
 │   ├── lunar.js         # 农历/八字换算库（lunar-javascript）
 │   ├── db-data.js       # 由 DB/*.csv 导出的数据（window.TIEBAN_DB）
-│   └── tieban.js        # 铁板神数核心算法（由 main.py 移植）
+│   ├── tieban.js        # 铁板神数核心算法（由 main.py 移植）
+│   └── duanyu-modern.js # 断语现代白话对照表（window.DUANYU_MODERN，10719 条）
+├── tools/
+│   └── build.js         # 发布构建：算法/内联脚本混淆 + 数据压缩 + HTML 压缩
 │
 │   # ↓ 以下为原始 Python 实现，纯前端部署时不需要
 ├── main.py              # 核心算法实现（参照实现）
@@ -86,11 +91,21 @@ TBOS/
 
 ### 方法一：部署到 Cloudflare Pages（推荐，纯前端）
 
-1. 打包以下文件（保持目录结构）：`index.html`、`result.html`、`Print.html`、`js/lunar.js`、`js/db-data.js`、`js/tieban.js`。
+1. 打包以下文件（保持目录结构）：`index.html`、`result.html`、`Print.html`、`js/lunar.js`、`js/db-data.js`、`js/tieban.js`、`js/duanyu-modern.js`。
 2. 在 Cloudflare Pages 新建项目 → 选择「直接上传（Direct Upload）」→ 拖入上述文件（或压缩包）。
 3. 无需构建命令、无需环境变量，部署完成即可访问。
 
 > 同样适用于 GitHub Pages、Vercel、Netlify 等任意静态托管，或本地直接用浏览器打开 `index.html`。
+
+#### 可选：混淆压缩后再发布
+
+```bash
+npm i terser javascript-obfuscator html-minifier-terser
+node tools/build.js        # 产物在 tools/dist/
+```
+
+产物策略：核心算法 `tieban.js` 与 HTML 内联脚本做**混淆**，`lunar.js`/`db-data.js`/`duanyu-modern.js` 做**压缩**（大数据文件混淆会 2~3 倍膨胀且无实质保护，故仅压缩）。把 `tools/dist/` 打包上传即可。
+> 注：纯前端代码/数据最终都在浏览器执行，混淆只提高逆向门槛，无法真正加密。
 
 ### 方法二：本地开发（Python 原始实现）
 
@@ -143,6 +158,11 @@ Python 版本保留用于对照/调试，运行方式：
 - **原始实现（对照）**：Python + http.server + cnlunar + pandas
 
 ## 更新日志
+
+### v3.1
+- 📅 流年表在虚岁旁增加对应**公历年份**（虚岁1岁=出生当年）
+- 💬 新增**断语现代白话**对照：原条文/校正后/铁板公式三种断语及本命条文断语下方均附白话释义（`js/duanyu-modern.js`，10719 条离线预生成）
+- 🔒 新增发布构建 `tools/build.js`：算法与内联脚本混淆、数据与库压缩
 
 ### v3.0
 - 🚀 **纯前端迁移**：核心算法与农历/八字换算全部移植为浏览器端 JavaScript（`js/tieban.js`），去除 Python 后端依赖
