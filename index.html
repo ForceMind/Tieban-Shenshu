@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>铁板神数 - 先天考刻推演</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'SimHei', sans-serif;
+            background: linear-gradient(135deg, #1a0f0a 0%, #2d1a0f 50%, #1a0f0a 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #d4af37;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: linear-gradient(180deg, #1a1210 0%, #0d0908 100%);
+            border-radius: 32px;
+            padding: 32px;
+            box-shadow: 0 0 60px rgba(212, 175, 55, 0.15),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        /* 标题区域 */
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .title-decoration {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .title {
+            font-size: 32px;
+            font-weight: bold;
+            letter-spacing: 10px;
+            background: linear-gradient(180deg, #ffd700 0%, #d4af37 50%, #b8860b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #c9a961;
+            letter-spacing: 6px;
+            opacity: 0.9;
+        }
+
+        .divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.5), transparent);
+            margin: 20px 0;
+        }
+
+        /* 表单容器 */
+        .form-container {
+            background: linear-gradient(180deg, #2a1a14 0%, #1a100c 100%);
+            border: 2px solid rgba(212, 175, 55, 0.4);
+            border-radius: 24px;
+            padding: 28px;
+        }
+
+        /* 表单分组 */
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .group-title {
+            text-align: center;
+            font-size: 15px;
+            color: #ffd700;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+
+        /* 行容器 */
+        .form-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .form-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-item {
+            flex: 1;
+        }
+
+        .form-label {
+            display: inline-block;
+            background: rgba(212, 175, 55, 0.15);
+            color: #ffd700;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 13px;
+            margin-bottom: 8px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        /* 输入框样式 */
+        .form-input {
+            width: 100%;
+            background: rgba(212, 175, 55, 0.08);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            border-radius: 12px;
+            padding: 10px 14px;
+            color: #ffd700;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            border-color: #ffd700;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+
+        .form-input::placeholder {
+            color: #8b7355;
+        }
+
+        /* 选择框样式 */
+        .form-select {
+            width: 100%;
+            background: rgba(212, 175, 55, 0.08);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            border-radius: 12px;
+            padding: 10px 14px;
+            color: #ffd700;
+            font-size: 14px;
+            outline: none;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23d4af37' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 36px;
+        }
+
+        .form-select:focus {
+            border-color: #ffd700;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+
+        .form-select option {
+            background: #1a100c;
+            color: #ffd700;
+        }
+
+        /* 性别选择 */
+        .gender-selector {
+            display: flex;
+            gap: 16px;
+        }
+
+        .gender-btn {
+            flex: 1;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            cursor: pointer;
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            background: rgba(212, 175, 55, 0.08);
+            color: #c9a961;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .gender-btn.active {
+            background: linear-gradient(180deg, #ffd700 0%, #d4af37 100%);
+            color: #1a0f0a;
+            border-color: transparent;
+            font-weight: bold;
+        }
+
+        /* 时间选择器 */
+        .time-selectors {
+            display: flex;
+            gap: 12px;
+        }
+
+        .time-selector {
+            flex: 1;
+        }
+
+        /* 提交按钮 */
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(180deg, #ffd700 0%, #d4af37 50%, #b8860b 100%);
+            color: #1a0f0a;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 24px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            letter-spacing: 4px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.6);
+        }
+
+        /* 输入提示 */
+        .input-hint {
+            font-size: 12px;
+            color: #8b7355;
+            margin-top: 4px;
+            text-align: center;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 520px) {
+            .container {
+                padding: 20px;
+                border-radius: 24px;
+            }
+
+            .title {
+                font-size: 24px;
+                letter-spacing: 6px;
+            }
+
+            .form-row {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .form-container {
+                padding: 20px;
+            }
+
+            .time-selectors {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 标题 -->
+        <div class="header">
+            <div class="title-decoration">🌸</div>
+            <div class="title">☯ 铁 板 神 数 ☯</div>
+            <div class="subtitle">· 先 天 考 刻 推 演 ·</div>
+            <div class="divider"></div>
+        </div>
+
+        <!-- 表单 -->
+        <form class="form-container" id="mainForm">
+            <!-- 基本信息 - 性别 -->
+            <div class="form-group">
+                <div class="group-title">👤 基本信息</div>
+                <div class="form-item">
+                    <label class="form-label">性别</label>
+                    <div class="gender-selector">
+                        <button type="button" class="gender-btn active" data-gender="男">男 ♂</button>
+                        <button type="button" class="gender-btn" data-gender="女">女 ♀</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 出生时间 -->
+            <div class="form-group">
+                <div class="group-title">🎂 出生时间</div>
+                <div class="form-row">
+                    <div class="form-item">
+                        <label class="form-label">年</label>
+                        <select class="form-select" id="birthYear">
+                        </select>
+                    </div>
+                    <div class="form-item">
+                        <label class="form-label">月</label>
+                        <select class="form-select" id="birthMonth">
+                        </select>
+                    </div>
+                    <div class="form-item">
+                        <label class="form-label">日</label>
+                        <select class="form-select" id="birthDay">
+                        </select>
+                    </div>
+                </div>
+                <div class="time-selectors">
+                    <div class="form-item">
+                        <label class="form-label">时</label>
+                        <select class="form-select" id="birthHour">
+                        </select>
+                    </div>
+                    <div class="form-item">
+                        <label class="form-label">分</label>
+                        <select class="form-select" id="birthMinute">
+                        </select>
+                    </div>
+                </div>
+                <div class="input-hint">格式示例：1990-01-01 12:00</div>
+            </div>
+
+            <!-- 求测时间 -->
+            <div class="form-group">
+                <div class="group-title">📅 求测时间</div>
+                <div class="form-row">
+                    <div class="form-item">
+                        <label class="form-label">年</label>
+                        <select class="form-select" id="queryYear">
+                        </select>
+                    </div>
+                    <div class="form-item">
+                        <label class="form-label">月</label>
+                        <select class="form-select" id="queryMonth">
+                        </select>
+                    </div>
+                    <div class="form-item">
+                        <label class="form-label">日</label>
+                        <select class="form-select" id="queryDay">
+                        </select>
+                    </div>
+                </div>
+                <div class="time-selectors">
+                    <div class="form-item">
+                        <label class="form-label">时</label>
+                        <select class="form-select" id="queryHour">
+                        </select>
+                    </div>
+                    <div class="form-item">
+                        <label class="form-label">分</label>
+                        <select class="form-select" id="queryMinute">
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 六亲考刻信息（可选，临时隐藏） -->
+            <!-- <div class="form-group">
+                <div class="group-title">👨‍👩‍👧‍👦 六亲考刻（可选）</div>
+                <div class="input-hint" style="margin-bottom: 16px;">如有已知父母生肖，可选择用于验证刻别</div>
+                <div class="form-row">
+                    <div class="form-item">
+                        <label class="form-label">父亲生肖</label>
+                        <select class="form-select" id="fatherZodiac">
+                            <option value="">请选择（可选）</option>
+                            <option value="鼠">鼠</option>
+                            <option value="牛">牛</option>
+                            <option value="虎">虎</option>
+                            <option value="兔">兔</option>
+                            <option value="龙">龙</option>
+                            <option value="蛇">蛇</option>
+                            <option value="马">马</option>
+                            <option value="羊">羊</option>
+                            <option value="猴">猴</option>
+                            <option value="鸡">鸡</option>
+                            <option value="狗">狗</option>
+                            <option value="猪">猪</option>
+                        </select>
+                    </div>
+                    <div class="form-item">
+                        <label class="form-label">母亲生肖</label>
+                        <select class="form-select" id="motherZodiac">
+                            <option value="">请选择（可选）</option>
+                            <option value="鼠">鼠</option>
+                            <option value="牛">牛</option>
+                            <option value="虎">虎</option>
+                            <option value="兔">兔</option>
+                            <option value="龙">龙</option>
+                            <option value="蛇">蛇</option>
+                            <option value="马">马</option>
+                            <option value="羊">羊</option>
+                            <option value="猴">猴</option>
+                            <option value="鸡">鸡</option>
+                            <option value="狗">狗</option>
+                            <option value="猪">猪</option>
+                        </select>
+                    </div>
+                </div>
+            </div> -->
+            
+            <!-- 提交按钮 -->
+            <button type="submit" class="submit-btn">🌸 开 始 推 演 🌸</button>
+        </form>
+    </div>
+
+    <!-- 纯前端计算依赖：历法库 + 数据 + 铁板神数算法（无需后端） -->
+    <script src="js/lunar.js"></script>
+    <script src="js/db-data.js"></script>
+    <script src="js/tieban.js"></script>
+    <script>
+        let selectedGender = "男";
+        let isSubmitting = false;
+
+        // 初始化年份选择器
+        function initYearSelect(selectId, defaultValue) {
+            const yearSelect = document.getElementById(selectId);
+            for (let year = 2099; year >= 1902; year--) {
+                const option = document.createElement('option');
+                option.value = year;
+                option.textContent = year + '年';
+                if (year === defaultValue) option.selected = true;
+                yearSelect.appendChild(option);
+            }
+        }
+
+        // 初始化月份选择器
+        function initMonthSelect(selectId, defaultValue) {
+            const monthSelect = document.getElementById(selectId);
+            const monthNames = ['一月', '二月', '三月', '四月', '五月', '六月', 
+                               '七月', '八月', '九月', '十月', '十一月', '十二月'];
+            for (let month = 1; month <= 12; month++) {
+                const option = document.createElement('option');
+                option.value = month;
+                option.textContent = monthNames[month - 1];
+                if (month === defaultValue) option.selected = true;
+                monthSelect.appendChild(option);
+            }
+        }
+
+        // 初始化日期选择器
+        function initDaySelect(selectId, defaultValue) {
+            const daySelect = document.getElementById(selectId);
+            for (let day = 1; day <= 31; day++) {
+                const option = document.createElement('option');
+                option.value = day;
+                option.textContent = day + '日';
+                if (day === defaultValue) option.selected = true;
+                daySelect.appendChild(option);
+            }
+        }
+
+        // 初始化时间选择器
+        function initTimeSelectors() {
+            // 小时
+            const hourSelects = ['birthHour', 'queryHour'];
+            const shichen = ['子', '丑', '丑', '寅', '寅', '卯', '卯', '辰', '辰', '巳', '巳', '午', 
+                           '午', '未', '未', '申', '申', '酉', '酉', '戌', '戌', '亥', '亥', '子'];
+            hourSelects.forEach(selectId => {
+                const hourSelect = document.getElementById(selectId);
+                for (let hour = 0; hour <= 23; hour++) {
+                    const option = document.createElement('option');
+                    option.value = hour;
+                    option.textContent = `${hour}时 (${shichen[hour]}时)`;
+                    if (hour === 12) option.selected = true;
+                    hourSelect.appendChild(option);
+                }
+            });
+
+            // 分钟
+            const minuteSelects = ['birthMinute', 'queryMinute'];
+            minuteSelects.forEach(selectId => {
+                const minuteSelect = document.getElementById(selectId);
+                for (let minute = 0; minute <= 59; minute++) {
+                    const option = document.createElement('option');
+                    option.value = minute;
+                    option.textContent = minute + '分';
+                    if (minute === 0) option.selected = true;
+                    minuteSelect.appendChild(option);
+                }
+            });
+        }
+
+        // 性别切换
+        function initGenderSelector() {
+            const btns = document.querySelectorAll('.gender-btn');
+            btns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    btns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    selectedGender = this.getAttribute('data-gender');
+                });
+            });
+        }
+
+        // 显示/隐藏加载状态
+        function setLoadingState(loading) {
+            const submitBtn = document.querySelector('.submit-btn');
+            if (loading) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = '推演中...';
+                submitBtn.style.opacity = '0.6';
+                isSubmitting = true;
+            } else {
+                submitBtn.disabled = false;
+                submitBtn.textContent = '🌸 开 始 推 演 🌸';
+                submitBtn.style.opacity = '1';
+                isSubmitting = false;
+            }
+        }
+
+        // 显示错误信息
+        function showError(message) {
+            // 创建错误提示元素
+            let errorDiv = document.getElementById('error-message');
+            if (!errorDiv) {
+                errorDiv = document.createElement('div');
+                errorDiv.id = 'error-message';
+                errorDiv.style.cssText = `
+                    background: rgba(255, 100, 100, 0.2);
+                    border: 1px solid rgba(255, 100, 100, 0.5);
+                    color: #ff6b6b;
+                    padding: 12px;
+                    border-radius: 12px;
+                    margin-top: 20px;
+                    text-align: center;
+                `;
+                document.querySelector('.form-container').appendChild(errorDiv);
+            }
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            
+            // 5秒后自动隐藏
+            setTimeout(() => {
+                if (errorDiv) {
+                    errorDiv.style.display = 'none';
+                }
+            }, 5000);
+        }
+
+        // 表单提交
+        function initFormSubmit() {
+            const form = document.getElementById('mainForm');
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                if (isSubmitting) {
+                    return;
+                }
+                
+                // 收集数据
+                const now = new Date();
+                const formData = {
+                    gender: selectedGender,
+                    birth: {
+                        year: parseInt(document.getElementById('birthYear').value),
+                        month: parseInt(document.getElementById('birthMonth').value),
+                        day: parseInt(document.getElementById('birthDay').value),
+                        hour: parseInt(document.getElementById('birthHour').value),
+                        minute: parseInt(document.getElementById('birthMinute').value)
+                    },
+                    query: {
+                        year: now.getFullYear(),
+                        month: now.getMonth() + 1,
+                        day: now.getDate(),
+                        hour: now.getHours(),
+                        minute: now.getMinutes()
+                    }
+                    // six_qin_info: {}
+                };
+                
+                // 收集父母生肖信息（临时禁用）
+                // const fatherZodiac = document.getElementById('fatherZodiac').value;
+                // const motherZodiac = document.getElementById('motherZodiac').value;
+                
+                // if (fatherZodiac) formData.six_qin_info['父亲生肖'] = fatherZodiac;
+                // if (motherZodiac) formData.six_qin_info['母亲生肖'] = motherZodiac;
+
+                try {
+                    setLoadingState(true);
+
+                    // 纯前端本地计算（原后端 /api/calculate 逻辑已移植到 js/tieban.js）
+                    const result = window.calculateTieban(formData);
+
+                    if (result.success) {
+                        // 保存结果到localStorage
+                        try {
+                            // 先保存表单数据
+                            localStorage.setItem('tiebanshushu_form', JSON.stringify(formData));
+                            // 再保存结果数据
+                            localStorage.setItem('tiebanshushu_result', JSON.stringify(result));
+                            console.log('表单数据和结果已保存到localStorage');
+                            // 延迟跳转确保数据保存完成
+                            setTimeout(() => {
+                                window.location.href = 'result.html';
+                            }, 100);
+                        } catch (storageError) {
+                            console.error('localStorage存储失败:', storageError);
+                            throw new Error('数据保存失败，请检查浏览器存储空间');
+                        }
+                    } else {
+                        throw new Error(result.error || '计算失败');
+                    }
+                    
+                } catch (error) {
+                    console.error('排盘失败:', error);
+                    showError('排盘失败: ' + error.message);
+                } finally {
+                    setLoadingState(false);
+                }
+            });
+        }
+
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            const now = new Date();
+            initYearSelect('birthYear', 1990);
+            initYearSelect('queryYear', now.getFullYear());
+            initMonthSelect('birthMonth', 1);
+            initMonthSelect('queryMonth', now.getMonth() + 1);
+            initDaySelect('birthDay', 1);
+            initDaySelect('queryDay', now.getDate());
+            initTimeSelectors();
+            initGenderSelector();
+
+            // 尝试恢复之前保存的表单数据
+            restoreFormData();
+
+            initFormSubmit();
+        });
+
+        // 恢复保存的表单数据
+        function restoreFormData() {
+            try {
+                const savedForm = localStorage.getItem('tiebanshushu_form');
+                if (!savedForm) return;
+
+                const formData = JSON.parse(savedForm);
+                console.log('恢复保存的表单数据:', formData);
+
+                // 恢复性别
+                if (formData.gender) {
+                    const genderBtns = document.querySelectorAll('.gender-btn');
+                    genderBtns.forEach(btn => {
+                        if (btn.dataset.gender === formData.gender) {
+                            btn.classList.add('active');
+                        } else {
+                            btn.classList.remove('active');
+                        }
+                    });
+                    selectedGender = formData.gender;
+                }
+
+                // 恢复出生日期时间
+                if (formData.birth) {
+                    if (formData.birth.year) document.getElementById('birthYear').value = formData.birth.year;
+                    if (formData.birth.month) document.getElementById('birthMonth').value = formData.birth.month;
+                    if (formData.birth.day) document.getElementById('birthDay').value = formData.birth.day;
+                    if (formData.birth.hour) document.getElementById('birthHour').value = formData.birth.hour;
+                    if (formData.birth.minute) document.getElementById('birthMinute').value = formData.birth.minute;
+                }
+
+                // 恢复求测日期时间
+                if (formData.query) {
+                    if (formData.query.year) document.getElementById('queryYear').value = formData.query.year;
+                    if (formData.query.month) document.getElementById('queryMonth').value = formData.query.month;
+                    if (formData.query.day) document.getElementById('queryDay').value = formData.query.day;
+                    if (formData.query.hour) document.getElementById('queryHour').value = formData.query.hour;
+                    if (formData.query.minute) document.getElementById('queryMinute').value = formData.query.minute;
+                }
+                
+                // 恢复父母生肖信息（临时禁用）
+                // if (formData.six_qin_info) {
+                //     if (formData.six_qin_info['父亲生肖']) document.getElementById('fatherZodiac').value = formData.six_qin_info['父亲生肖'];
+                //     if (formData.six_qin_info['母亲生肖']) document.getElementById('motherZodiac').value = formData.six_qin_info['母亲生肖'];
+                // }
+
+                console.log('表单数据恢复成功');
+            } catch (e) {
+                console.error('恢复表单数据失败:', e);
+            }
+        }
+    </script>
+</body>
+</html>

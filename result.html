@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>铁板神数 - 推演结果</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: "Microsoft YaHei", "Hiragino Sans GB", sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #f8f4e3;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 80px 20px;
+        }
+        
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid #f8f4e320;
+            border-top: 4px solid #d4af37;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(180deg, rgba(212,175,55,0.15) 0%, transparent 100%);
+            border-radius: 16px 16px 0 0;
+            margin-bottom: 30px;
+        }
+        
+        .title {
+            font-size: 36px;
+            font-weight: bold;
+            color: #d4af37;
+            letter-spacing: 12px;
+            text-shadow: 0 0 20px rgba(212,175,55,0.5);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            color: #f8f4e3aa;
+            letter-spacing: 6px;
+        }
+        
+        .btn-group {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .btn {
+            padding: 12px 32px;
+            font-size: 16px;
+            border: 2px solid #d4af37;
+            background: rgba(212,175,55,0.1);
+            color: #d4af37;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn:hover {
+            background: rgba(212,175,55,0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(212,175,55,0.3);
+        }
+        
+        .btn-secondary {
+            border-color: #8e9aaf;
+            color: #8e9aaf;
+            background: rgba(142,154,175,0.1);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(142,154,175,0.3);
+            box-shadow: 0 4px 12px rgba(142,154,175,0.3);
+        }
+        
+        .section-title {
+            font-size: 20px;
+            color: #d4af37;
+            margin: 40px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #d4af3730;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title::before {
+            content: "☯";
+            font-size: 24px;
+        }
+        
+        .input-info {
+            background: rgba(212,175,55,0.08);
+            border: 1px solid #d4af3730;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 30px;
+        }
+        
+        .input-info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(212,175,55,0.1);
+        }
+        
+        .input-info-item:last-child {
+            border-bottom: none;
+        }
+        
+        .input-label {
+            color: #8e9aaf;
+            font-size: 14px;
+        }
+        
+        .input-value {
+            color: #f8f4e3;
+            font-weight: 500;
+        }
+        
+        .basic-info {
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        
+        .basic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .basic-item {
+            background: rgba(212,175,55,0.08);
+            border: 1px solid #d4af3730;
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+        
+        .basic-item-label {
+            font-size: 12px;
+            color: #8e9aaf;
+            margin-bottom: 8px;
+        }
+        
+        .basic-item-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #d4af37;
+        }
+        
+        .gua-display {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            align-items: center;
+            padding: 30px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+        }
+        
+        .gua-part {
+            text-align: center;
+        }
+        
+        .gua-title {
+            color: #8e9aaf;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+        
+        .gua-lines {
+            font-size: 36px;
+            letter-spacing: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .gua-element {
+            color: #d4af37;
+            font-size: 14px;
+        }
+        
+        .gua-main {
+            text-align: center;
+        }
+        
+        .gua-main-name {
+            font-size: 32px;
+            font-weight: bold;
+            color: #d4af37;
+            margin-bottom: 8px;
+        }
+        
+        .gua-main-label {
+            color: #8e9aaf;
+            font-size: 14px;
+        }
+
+        /* 卦象水平布局样式 */
+        .gua-display-container {
+            display: flex !important;
+            justify-content: center !important;
+            gap: 60px !important;
+            align-items: center !important;
+            padding: 30px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+        }
+
+        .gua-section {
+            text-align: center;
+            flex: 1;
+            min-width: 100px;
+        }
+
+        .gua-label {
+            color: #8e9aaf;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .gua-symbol {
+            font-family: "STKaiti", "KaiTi", "SimKai", serif;
+            font-size: 48px;
+            color: #d4af37;
+            margin-bottom: 8px;
+            line-height: 1;
+        }
+
+        .gua-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .gua-main-section {
+            text-align: center;
+            padding: 0 30px;
+            min-width: 100px;
+            border-left: 1px solid rgba(212,175,55,0.3);
+            border-right: 1px solid rgba(212,175,55,0.3);
+        }
+
+        .gua-combination {
+            font-size: 14px;
+            color: #8e9aaf;
+        }
+        
+        .destiny-tiaowen {
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 24px;
+            overflow-x: auto;
+        }
+        
+        .destiny-header {
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #d4af3730;
+        }
+        
+        .destiny-info {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .destiny-info-item {
+            color: #f8f4e3;
+        }
+        
+        .destiny-info-item span {
+            color: #d4af37;
+            font-weight: bold;
+        }
+        
+        .destiny-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .destiny-table th {
+            background: rgba(212,175,55,0.15);
+            color: #d4af37;
+            padding: 12px;
+            text-align: left;
+            font-weight: 500;
+            border-bottom: 2px solid #d4af3730;
+        }
+        
+        .destiny-table td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(212,175,55,0.1);
+            color: #f8f4e3;
+        }
+        
+        .destiny-table tr:hover td {
+            background: rgba(212,175,55,0.05);
+        }
+        
+        .liunian-section {
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 24px;
+            overflow-x: auto;
+        }
+        
+        .liunian-section {
+            margin-top: 20px;
+        }
+
+        .liunian-tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 16px;
+            border-bottom: 2px solid rgba(212,175,55,0.3);
+            padding-bottom: 0;
+        }
+
+        .liunian-tab {
+            padding: 10px 20px;
+            background: rgba(212,175,55,0.1);
+            border: 1px solid rgba(212,175,55,0.3);
+            border-bottom: none;
+            border-radius: 8px 8px 0 0;
+            color: #c9a961;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: -2px;
+        }
+
+        .liunian-tab:hover {
+            background: rgba(212,175,55,0.2);
+            color: #d4af37;
+        }
+
+        .liunian-tab.active {
+            background: rgba(212,175,55,0.25);
+            color: #ffd700;
+            font-weight: bold;
+            border-color: rgba(212,175,55,0.5);
+        }
+
+        .liunian-tab-content {
+            display: none;
+        }
+
+        .liunian-tab-content.active {
+            display: block;
+        }
+
+        .liunian-table-container {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: 12px;
+            background: linear-gradient(180deg, rgba(212,175,55,0.05) 0%, rgba(212,175,55,0.02) 100%);
+            border: 1px solid rgba(212,175,55,0.2);
+        }
+
+        .liunian-table {
+            width: 100%;
+            min-width: 900px;
+            border-collapse: collapse;
+            font-size: 11px;
+            table-layout: auto;
+        }
+
+        .liunian-table th,
+        .liunian-table td {
+            padding: 6px 8px;
+            text-align: center;
+            border-bottom: 1px solid rgba(212,175,55,0.15);
+            border-right: 1px solid rgba(212,175,55,0.08);
+            color: #f8f4e3;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .liunian-table th {
+            background: linear-gradient(180deg, rgba(212,175,55,0.2) 0%, rgba(212,175,55,0.12) 100%);
+            color: #d4af37;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            font-size: 11px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .liunian-table th.group-header {
+            background: linear-gradient(180deg, rgba(212,175,55,0.25) 0%, rgba(212,175,55,0.18) 100%);
+            font-size: 12px;
+            padding: 8px 6px;
+        }
+
+        .liunian-table th.sub-header {
+            background: rgba(212,175,55,0.1);
+            font-size: 11px;
+            color: #c9a961;
+            padding: 6px 4px;
+        }
+
+        .liunian-table tr:hover td {
+            background: rgba(212,175,55,0.08);
+        }
+
+        .liunian-table tr:nth-child(even) td {
+            background: rgba(212,175,55,0.03);
+        }
+
+        .liunian-table tr:nth-child(even):hover td {
+            background: rgba(212,175,55,0.1);
+        }
+
+        .age-cell {
+            color: #ffd700;
+            font-weight: bold;
+            font-size: 11px;
+            background: rgba(212,175,55,0.1);
+        }
+
+        .gua-cell {
+            font-weight: 600;
+        }
+
+        .duanyu-cell {
+            text-align: left;
+            max-width: 150px;
+            font-size: 10px;
+            line-height: 1.3;
+        }
+
+        .group-divider {
+            background: linear-gradient(180deg, rgba(212,175,55,0.15) 0%, rgba(212,175,55,0.08) 100%) !important;
+        }
+
+        .group-divider td {
+            padding: 10px 8px !important;
+            text-align: left !important;
+            font-weight: bold;
+            color: #d4af37 !important;
+            font-size: 12px;
+            border-bottom: 2px solid rgba(212,175,55,0.4);
+        }
+
+        .highlight-cell {
+            background: rgba(212,175,55,0.15) !important;
+            color: #ffd700;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 30px;
+            color: #8e9aaf;
+            font-size: 14px;
+        }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #d4af3730, transparent);
+            margin: 40px 0;
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 24px;
+                letter-spacing: 6px;
+            }
+
+            .gua-display {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .basic-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .liunian-table-container {
+                border-radius: 8px;
+                margin: 0 -10px;
+                padding: 0 10px;
+            }
+
+            .liunian-table {
+                font-size: 9px;
+                min-width: 1000px;
+            }
+
+            .liunian-table th,
+            .liunian-table td {
+                padding: 6px 3px;
+            }
+
+            .liunian-table th.group-header {
+                font-size: 10px;
+            }
+
+            .liunian-table th.sub-header {
+                font-size: 8px;
+                padding: 4px 2px;
+            }
+
+            .age-cell {
+                font-size: 11px;
+                min-width: 35px;
+            }
+
+            .gua-cell {
+                font-size: 10px;
+                min-width: 50px;
+            }
+
+            .duanyu-cell {
+                max-width: 80px;
+                font-size: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="loading" id="loadingState">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">正在加载推演结果...</div>
+        </div>
+        
+        <div id="resultContent" style="display: none;">
+            <div class="header">
+                <div class="title">☯ 铁板神数 ☯</div>
+                <div class="subtitle">先天考刻推演结果</div>
+            </div>
+            
+            <div class="input-info" id="inputInfo"></div>
+            
+            <div class="divider"></div>
+            
+            <div class="section-title">基础排盘</div>
+            <div class="basic-info">
+                <div class="basic-grid" id="basicGrid"></div>
+                <div class="gua-display" id="guaDisplay"></div>
+            </div>
+            
+            <div class="section-title">本命条文</div>
+            <div class="destiny-tiaowen" id="destinyTiaowen"></div>
+            
+            <!-- <div class="section-title">六亲考刻分析</div>
+            <div class="destiny-tiaowen" id="sixQinAnalysis"></div> -->
+            
+            <div class="section-title">流年条文 (1-100岁)</div>
+            <div class="liunian-section">
+                <div class="liunian-tabs" id="liunianTabs">
+                    <div class="liunian-tab active" data-tab="tab1">1-30岁</div>
+                    <div class="liunian-tab" data-tab="tab2">31-60岁</div>
+                    <div class="liunian-tab" data-tab="tab3">61-90岁</div>
+                    <div class="liunian-tab" data-tab="tab4">91-100岁</div>
+                </div>
+                <div class="liunian-tab-content active" id="tab1">
+                    <div class="liunian-table-container">
+                        <table class="liunian-table" id="liunianTable1"></table>
+                    </div>
+                </div>
+                <div class="liunian-tab-content" id="tab2">
+                    <div class="liunian-table-container">
+                        <table class="liunian-table" id="liunianTable2"></table>
+                    </div>
+                </div>
+                <div class="liunian-tab-content" id="tab3">
+                    <div class="liunian-table-container">
+                        <table class="liunian-table" id="liunianTable3"></table>
+                    </div>
+                </div>
+                <div class="liunian-tab-content" id="tab4">
+                    <div class="liunian-table-container">
+                        <table class="liunian-table" id="liunianTable4"></table>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="btn-group">
+                <button class="btn btn-secondary" onclick="returnToIndex()">← 返回重新推演</button>
+                <button class="btn" onclick="openPrintPage()">📄 打印报告</button>
+            </div>
+            
+            <div class="footer">
+                <div class="footer-text">
+                    ☯ 本站为传统文化展示与研习历程，仅供文化研习参考
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 卦象数据 - 每个卦显示一个符号（代表三个爻）
+        const guaMap = {
+            "乾": {"lines": "☰", "element": "金"},
+            "坤": {"lines": "☷", "element": "土"},
+            "震": {"lines": "☳", "element": "木"},
+            "巽": {"lines": "☴", "element": "木"},
+            "坎": {"lines": "☵", "element": "水"},
+            "离": {"lines": "☲", "element": "火"},
+            "艮": {"lines": "☶", "element": "土"},
+            "兑": {"lines": "☱", "element": "金"}
+        };
+        
+        // 十二辟卦组成映射（上卦+下卦）
+        const twelveHexMap = {
+            "乾": {"shang": "乾", "xia": "乾"},      // 乾为天
+            "夬": {"shang": "兑", "xia": "乾"},      // 泽天夬
+            "大壮": {"shang": "震", "xia": "乾"},    // 雷天大壮
+            "泰": {"shang": "坤", "xia": "乾"},      // 地天泰
+            "临": {"shang": "坤", "xia": "兑"},      // 地泽临
+            "复": {"shang": "坤", "xia": "震"},      // 地雷复
+            "坤": {"shang": "坤", "xia": "坤"},      // 坤为地
+            "剥": {"shang": "艮", "xia": "坤"},      // 山地剥
+            "观": {"shang": "巽", "xia": "坤"},      // 风地观
+            "否": {"shang": "乾", "xia": "坤"},      // 天地否
+            "遁": {"shang": "乾", "xia": "艮"},      // 天山遁
+            "姤": {"shang": "乾", "xia": "巽"}       // 天风姤
+        };
+        
+        // 打开打印页面
+        function openPrintPage() {
+            window.open('Print.html', '_blank');
+        }
+
+        // 监听Ctrl+P键盘事件
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'p') {
+                e.preventDefault();
+                openPrintPage();
+            }
+        });
+
+        // 返回首页并保留表单数据
+        function returnToIndex() {
+            // 获取当前结果数据
+            const resultStr = localStorage.getItem('tiebanshushu_result');
+            if (resultStr) {
+                try {
+                    const data = JSON.parse(resultStr);
+                    // 保存表单数据
+                    const formData = {
+                        gender: data.gender,
+                        birth: data.birth_info.birth_dt || {},
+                        query: data.query_info.query_dt || {}
+                    };
+                    localStorage.setItem('tiebanshushu_form', JSON.stringify(formData));
+                } catch (e) {
+                    console.error('保存表单数据失败:', e);
+                }
+            }
+            window.location.href = 'index.html';
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            const resultStr = localStorage.getItem('tiebanshushu_result');
+            
+            if (resultStr) {
+                try {
+                    const data = JSON.parse(resultStr);
+                    
+                    if (data.success) {
+                        // 渲染各部分
+                        renderInputInfo(data);
+                        renderBasicGrid(data.result);
+                        renderGuaDisplay(data.result.hex_name);
+                        renderDestinyTiaowen(data.result);
+                        // renderSixQinAnalysis(data.result);
+                        renderLiunianTable(data.result.liunian);
+                        
+                        // 隐藏加载，显示结果
+                        document.getElementById('loadingState').style.display = 'none';
+                        document.getElementById('resultContent').style.display = 'block';
+                    } else {
+                        // 显示错误
+                        showError(data.error || '未知错误');
+                    }
+                } catch (error) {
+                    console.error('解析结果失败:', error);
+                    showError('数据解析失败');
+                }
+            } else {
+                // 如果没有结果，跳转到首页
+                window.location.href = 'index.html';
+            }
+        });
+        
+        function showError(message) {
+            const loadingDiv = document.getElementById('loadingState');
+            loadingDiv.innerHTML = `
+                <div style="text-align: center; padding: 40px;">
+                    <div style="font-size: 24px; color: #ff6b6b; margin-bottom: 16px;">排盘失败</div>
+                    <div style="color: #c9a961; margin-bottom: 24px;">${message}</div>
+                    <button onclick="window.location.href='index.html'" 
+                            style="background: rgba(212,175,55,0.2); color: #ffd700; border: 1px solid rgba(212,175,55,0.5); 
+                                   padding: 10px 24px; border-radius: 8px; cursor: pointer;">
+                        返回首页
+                    </button>
+                </div>
+            `;
+        }
+        
+        function renderInputInfo(data) {
+            const container = document.getElementById('inputInfo');
+            container.innerHTML = `
+                <div class="input-info-item">
+                    <span class="input-label">性别</span>
+                    <span class="input-value">${data.gender}</span>
+                </div>
+                <div class="input-info-item">
+                    <span class="input-label">出生日期（阳历）</span>
+                    <span class="input-value">${data.info_b.date_str}</span>
+                </div>
+                <div class="input-info-item">
+                    <span class="input-label">农历</span>
+                    <span class="input-value">${data.info_b.lunar_str}</span>
+                </div>
+                <div class="input-info-item">
+                    <span class="input-label">闰月</span>
+                    <span class="input-value">${data.info_b.is_leap ? '是' : '否'}</span>
+                </div>
+                <div class="input-info-item">
+                    <span class="input-label">出生八字</span>
+                    <span class="input-value">${data.info_b.bazi.year} ${data.info_b.bazi.month} ${data.info_b.bazi.day} ${data.info_b.bazi.time}</span>
+                </div>
+                <div class="input-info-item">
+                    <span class="input-label">求测日期</span>
+                    <span class="input-value">${data.info_q.date_str}</span>
+                </div>
+                <div class="input-info-item">
+                    <span class="input-label">求测八字</span>
+                    <span class="input-value">${data.info_q.bazi.year} ${data.info_q.bazi.month} ${data.info_q.bazi.day} ${data.info_q.bazi.time}</span>
+                </div>
+            `;
+        }
+        
+        function renderBasicGrid(result) {
+            const container = document.getElementById('basicGrid');
+            
+            // 解析日命和时运
+            const dayLifeMatch = result.day_life_calc.match(/日命:(\d+)/);
+            const timeLuckMatch = result.day_life_calc.match(/时运:(\d+)/);
+            const dayLife = dayLifeMatch ? dayLifeMatch[1] : '?';
+            const timeLuck = timeLuckMatch ? timeLuckMatch[1] : '?';
+            
+            // 构建基础信息项
+            let html = `
+                <div class="basic-item">
+                    <div class="basic-item-label">先天命数</div>
+                    <div class="basic-item-value">${result.cong_num}</div>
+                </div>
+                <div class="basic-item">
+                    <div class="basic-item-label">五音命数</div>
+                    <div class="basic-item-value">${result.tone_num}</div>
+                </div>
+                <div class="basic-item">
+                    <div class="basic-item-label">日命数</div>
+                    <div class="basic-item-value">${dayLife}</div>
+                </div>
+                <div class="basic-item">
+                    <div class="basic-item-label">时运数</div>
+                    <div class="basic-item-value">${timeLuck}</div>
+                </div>
+                <div class="basic-item">
+                    <div class="basic-item-label">刻别</div>
+                    <div class="basic-item-value">${result.moment_cn}</div>
+                </div>
+                <div class="basic-item">
+                    <div class="basic-item-label">本命数</div>
+                    <div class="basic-item-value">${result.main_num}</div>
+                </div>
+                <div class="basic-item">
+                    <div class="basic-item-label">十二辟卦</div>
+                    <div class="basic-item-value" style="font-size: 18px;">${result.hex_name}</div>
+                </div>
+                <div class="basic-item">
+                    <div class="basic-item-label">后天命数</div>
+                    <div class="basic-item-value">${result.pn_num}</div>
+                </div>
+            `;
+            
+            // 添加三元九运
+            if (result.san_yuan) {
+                html += `
+                    <div class="basic-item">
+                        <div class="basic-item-label">三元九运</div>
+                        <div class="basic-item-value" style="color: #88ccff;">${result.san_yuan}</div>
+                    </div>
+                `;
+            }
+            
+            // 添加五数寄宫信息
+            if (result.wu_shu_ji_gong) {
+                const wsg = result.wu_shu_ji_gong;
+                html += `
+                    <div class="basic-item" style="grid-column: span 2;">
+                        <div class="basic-item-label">五数寄宫</div>
+                        <div class="basic-item-value" style="font-size: 14px; color: #ffcc88;">
+                            ${wsg.original} → ${wsg.寄宫卦} → ${wsg.实际命数}
+                        </div>
+                        <div style="font-size: 10px; color: #888; margin-top: 4px;">依据: ${wsg.依据}</div>
+                    </div>
+                `;
+            }
+            
+            // 添加八卦加则信息
+            if (result.bagua_jiaze) {
+                const jz = result.bagua_jiaze;
+                html += `
+                    <div class="basic-item" style="grid-column: span 2;">
+                        <div class="basic-item-label">八卦加则</div>
+                        <div class="basic-item-value" style="font-size: 14px; color: #ccff88;">
+                            ${jz.卦名} | 起始${jz.起始数}
+                        </div>
+                        <div style="font-size: 10px; color: #888; margin-top: 4px;">${jz.规则}</div>
+                    </div>
+                `;
+            }
+            
+            container.innerHTML = html;
+        }
+        
+        function renderGuaDisplay(hexName) {
+            const container = document.getElementById('guaDisplay');
+            
+            // 获取十二辟卦的组成
+            let shangName = "乾";
+            let xiaName = "坤";
+            
+            // 首先检查是否是十二辟卦
+            if (twelveHexMap[hexName]) {
+                shangName = twelveHexMap[hexName].shang;
+                xiaName = twelveHexMap[hexName].xia;
+            } else {
+                // 通用处理：尝试从卦名中提取上下卦
+                for (let name in guaMap) {
+                    if (hexName.startsWith(name)) {
+                        shangName = name;
+                    }
+                    if (hexName.endsWith(name)) {
+                        xiaName = name;
+                    }
+                }
+            }
+            
+            const shangGua = guaMap[shangName] || guaMap["乾"];
+            const xiaGua = guaMap[xiaName] || guaMap["坤"];
+            
+            container.innerHTML = `
+                <div class="gua-display-container">
+                    <!-- 上卦 -->
+                    <div class="gua-section">
+                        <div class="gua-label">上卦</div>
+                        <div class="gua-symbol">${shangGua.lines}</div>
+                        <div class="gua-name">${shangName}</div>
+                        <div class="gua-element">${shangGua.element}</div>
+                    </div>
+                    
+                    <!-- 本卦名称（居中显示，不显示卦象符号） -->
+                    <div class="gua-main-section">
+                        <div class="gua-main-label">本卦</div>
+                        <div class="gua-main-name">${hexName}</div>
+                        <div class="gua-combination">${shangName} + ${xiaName}</div>
+                    </div>
+                    
+                    <!-- 下卦 -->
+                    <div class="gua-section">
+                        <div class="gua-label">下卦</div>
+                        <div class="gua-symbol">${xiaGua.lines}</div>
+                        <div class="gua-name">${xiaName}</div>
+                        <div class="gua-element">${xiaGua.element}</div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function renderDestinyTiaowen(result) {
+            const container = document.getElementById('destinyTiaowen');
+            const tbl = result.tbl_data;
+            
+            // 检查tbl_data是否存在
+            if (!tbl) {
+                container.innerHTML = `
+                    <div style="color: #8e9aaf; text-align: center; padding: 40px;">
+                        <p style="margin-bottom: 10px;">暂无本命条文数据</p>
+                        <p style="font-size: 12px; color: #666;">
+                            十二辟卦：${result.hex_name || '未知'} |
+                            刻别：${result.moment_cn || '未知'} |
+                            先天命数：${result.cong_num || '未知'}
+                        </p>
+                        <p style="font-size: 11px; color: #555; margin-top: 10px;">
+                            注：并非所有命数组合都有对应的本命条文记录
+                        </p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // 检查offsets是否存在
+            if (!tbl.offsets) {
+                container.innerHTML = `
+                    <div style="color: #8e9aaf; text-align: center; padding: 40px;">
+                        <p>本命条文数据结构异常</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let tableContent = `
+                <div class="destiny-header">
+                    <div class="destiny-info">
+                        <div class="destiny-info-item">十二辟卦：<span>${result.hex_name}</span></div>
+                        <div class="destiny-info-item">刻别：<span>${result.moment_cn}</span></div>
+                        <div class="destiny-info-item">先天命数：<span>${result.cong_num}</span></div>
+                        <div class="destiny-info-item">基数：<span>${tbl.base}</span></div>
+                        <div class="destiny-info-item">序数：<span>${tbl.seq}</span></div>
+                    </div>
+                </div>
+                <table class="destiny-table">
+                    <thead>
+                        <tr>
+                            <th>类别</th>
+                            <th>加数</th>
+                            <th>条文数</th>
+                            <th>计算式</th>
+                            <th>断语</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            const categories = ['性格', '才能前程', '财运', '兄弟个数'];
+            let hasData = false;
+
+            categories.forEach(cat => {
+                const offsets = tbl.offsets[cat] || [];
+                const duanyus = tbl.duanyus && tbl.duanyus[cat] || [];
+                if (offsets.length > 0) {
+                    hasData = true;
+                    offsets.forEach((off, idx) => {
+                        const fortune = tbl.base + tbl.seq + off;
+                        const duanyuInfo = duanyus[idx] || {duanyu: '—'};
+                        tableContent += `
+                            <tr>
+                                <td>${idx === 0 ? cat : ''}</td>
+                                <td>${off}</td>
+                                <td>${fortune}</td>
+                                <td>${tbl.base} + ${tbl.seq} + ${off} = ${fortune}</td>
+                                <td style="color: #d4af37; font-weight: 500;">${duanyuInfo.duanyu}</td>
+                            </tr>
+                        `;
+                    });
+                }
+            });
+            
+            tableContent += `
+                    </tbody>
+                </table>
+            `;
+            
+            if (!hasData) {
+                container.innerHTML = `
+                    <div style="color: #8e9aaf; text-align: center; padding: 40px;">
+                        <p>本命条文各属性暂无偏移数据</p>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = tableContent;
+            }
+        }
+        
+        function renderLiunianTable(liunian) {
+            if (!liunian || liunian.length === 0) {
+                for (let i = 1; i <= 4; i++) {
+                    document.getElementById('liunianTable' + i).innerHTML = '<tr><td colspan="12" style="text-align: center; padding: 40px; color: #8e9aaf;">暂无流年数据</td></tr>';
+                }
+                return;
+            }
+
+            // 按年龄段分组
+            const groups = [
+                { id: 1, start: 1, end: 30 },
+                { id: 2, start: 31, end: 60 },
+                { id: 3, start: 61, end: 90 },
+                { id: 4, start: 91, end: 100 }
+            ];
+
+            groups.forEach(group => {
+                const filtered = liunian.filter(item => item.age >= group.start && item.age <= group.end);
+                const container = document.getElementById('liunianTable' + group.id);
+
+                let tableContent = `
+                    <thead>
+                        <tr>
+                            <th rowspan="2" class="age-cell">岁数</th>
+                            <th rowspan="2">干支</th>
+                            <th rowspan="2">五音</th>
+                            <th rowspan="2">标记</th>
+                            <th colspan="2" class="group-header">字母</th>
+                            <th colspan="3" class="group-header">原条文</th>
+                            <th colspan="3" class="group-header">校正后条文</th>
+                            <th colspan="3" class="group-header">铁板公式 (基数+刻干×48)</th>
+                        </tr>
+                        <tr>
+                            <th class="sub-header">字母</th>
+                            <th class="sub-header">校正字母</th>
+                            <th class="sub-header">条文</th>
+                            <th class="sub-header">断语</th>
+                            <th class="sub-header">年龄</th>
+                            <th class="sub-header">条文</th>
+                            <th class="sub-header">断语</th>
+                            <th class="sub-header">年龄</th>
+                            <th class="sub-header">条文</th>
+                            <th class="sub-header">断语</th>
+                            <th class="sub-header">年龄</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                `;
+
+                filtered.forEach(item => {
+                    const originalDuanyu = item.original_duanyu || '—';
+                    const correctedDuanyu = item.corrected_duanyu || '—';
+                    const tiebanDuanyu = item.tieban_duanyu || '—';
+
+                    tableContent += `
+                        <tr>
+                            <td class="age-cell">${item.age}</td>
+                            <td class="gua-cell">${item.year}</td>
+                            <td>${item.sound}</td>
+                            <td>${item.marker}</td>
+                            <td class="highlight-cell">${item.letter}</td>
+                            <td>${item.corrected_letter || '—'}</td>
+                            <td>${item.original_fortune || '—'}</td>
+                            <td class="duanyu-cell">${originalDuanyu}</td>
+                            <td>${item.original_duanyu_age || '—'}</td>
+                            <td class="highlight-cell">${item.corrected_fortune || '—'}</td>
+                            <td class="duanyu-cell">${correctedDuanyu}</td>
+                            <td>${item.corrected_duanyu_age || '—'}</td>
+                            <td class="highlight-cell" style="background: rgba(255, 100, 0, 0.15);">${item.tieban_fortune || '—'}</td>
+                            <td class="duanyu-cell">${tiebanDuanyu}</td>
+                            <td>${item.tieban_duanyu_age || '—'}</td>
+                        </tr>
+                    `;
+                });
+
+                tableContent += '</tbody>';
+                container.innerHTML = tableContent;
+            });
+
+        function renderSixQinAnalysis(result) {
+            const container = document.getElementById('sixQinAnalysis');
+            let html = '';
+            
+            try {
+                // 检查是否有父母生肖验证结果
+                if (result.six_qin_verify && Object.keys(result.six_qin_verify.known_info || {}).length > 0) {
+                    const verify = result.six_qin_verify;
+                    html += `
+                        <div class="destiny-header">
+                            <div class="destiny-info">
+                                <div class="destiny-info-item">父母生肖验证</div>
+                            </div>
+                        </div>
+                        <div style="background: rgba(212, 175, 55, 0.1); padding: 16px; border-radius: 12px; margin-bottom: 16px;">
+                            <div style="color: #8e9aaf; margin-bottom: 8px;">已知信息：</div>
+                            <div style="color: #f8f4e3; margin-bottom: 12px;">
+                                ${Object.entries(verify.known_info).map(([key, val]) => `<span style="display: inline-block; margin-right: 16px;"><strong>${key}：</strong>${val}</span>`).join('')}
+                            </div>
+                            <div style="color: #8e9aaf; margin-bottom: 8px;">刻别匹配度：</div>
+                            <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                                ${Object.entries(verify.match_scores || {}).map(([kebie, score]) => `
+                                    <div style="background: ${verify.verified_kebie === kebie ? 'rgba(212, 175, 55, 0.3)' : 'rgba(142, 154, 175, 0.1)'}; padding: 8px 16px; border-radius: 8px; border: 2px solid ${verify.verified_kebie === kebie ? '#d4af37' : 'rgba(142, 154, 175, 0.3)'};">
+                                        <div style="color: ${verify.verified_kebie === kebie ? '#ffd700' : '#c9a961'}; font-weight: bold;">${kebie}</div>
+                                        <div style="color: #f8f4e3; font-size: 14px;">匹配 ${score} 项</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            ${verify.verified_kebie ? `
+                                <div style="margin-top: 12px; padding: 12px; background: rgba(100, 200, 100, 0.15); border: 1px solid rgba(100, 200, 100, 0.4); border-radius: 8px;">
+                                    <span style="color: #64c864; font-weight: bold;">✓ 推荐刻别：${verify.verified_kebie}</span>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                }
+                
+                // 显示父母相关分析
+                if (result.six_qin_analysis && result.six_qin_analysis.qin_analysis) {
+                    const analysis = result.six_qin_analysis;
+                    const parentData = analysis.qin_analysis['父母'];
+                    
+                    html += `
+                        <div class="destiny-header">
+                            <div class="destiny-info">
+                                <div class="destiny-info-item">终局条文数：<span>${analysis.final_fortune || '—'}</span></div>
+                                <div class="destiny-info-item">断语：<span>${analysis.final_duanyu || '未找到'}</span></div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    if (parentData && parentData.fortune) {
+                        html += `
+                            <table class="destiny-table">
+                                <thead>
+                                    <tr>
+                                        <th>类型</th>
+                                        <th>条文数</th>
+                                        <th>断语</th>
+                                        <th>与终局差</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="font-weight: bold;">父母</td>
+                                        <td>${parentData.fortune.num}</td>
+                                        <td style="color: #d4af37;">${parentData.fortune.duanyu}</td>
+                                        <td>${parentData.closest_diff}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        `;
+                    }
+                }
+            } catch (e) {
+                console.error('渲染六亲考刻分析出错:', e);
+            }
+            
+            if (!html) {
+                html = `
+                    <div style="color: #8e9aaf; text-align: center; padding: 40px;">
+                        <p>六亲考刻分析数据暂不可用</p>
+                        <p style="font-size: 12px; color: #666; margin-top: 10px;">在首页选择父母生肖后重新推演可获得更准确的结果</p>
+                    </div>
+                `;
+            }
+            
+            container.innerHTML = html;
+        }
+        
+            // 标签切换
+            document.querySelectorAll('.liunian-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('.liunian-tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.liunian-tab-content').forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+                    document.getElementById(this.dataset.tab).classList.add('active');
+                });
+            });
+        }
+    </script>
+</body>
+</html>
