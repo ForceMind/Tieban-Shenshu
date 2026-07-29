@@ -1,0 +1,265 @@
+/* ============================================================
+   铁板神数 · 现代国风设计系统（移动优先）
+   深墨底 + 酱金点缀，大字号、大触控区、卡片化
+   所有页面共享；类名即组件契约
+   ============================================================ */
+
+:root {
+  /* 墨色（底 → 抬升 → 卡片） */
+  --ink-0: #100E0B;
+  --ink-1: #17140F;
+  --ink-2: #201B14;
+  --ink-3: #2A241B;
+  /* 酱金 */
+  --gold: #C9A24B;
+  --gold-bright: #E6C877;
+  --gold-deep: #8C6E3A;
+  --line: rgba(201, 162, 75, 0.18);
+  --line-strong: rgba(201, 162, 75, 0.38);
+  /* 文字 */
+  --text: #ECE4D3;
+  --text-dim: #A79C86;
+  --text-mute: #766C58;
+  /* 语义色（吉 / 凶 / 白话） */
+  --jade: #86B98F;
+  --terra: #D0946E;
+  --vernacular: #9FD0A8;
+  /* 尺寸 */
+  --radius: 18px;
+  --radius-sm: 12px;
+  --radius-pill: 999px;
+  --shadow: 0 8px 28px rgba(0, 0, 0, .45);
+  --shadow-sm: 0 3px 12px rgba(0, 0, 0, .35);
+  --tap: 48px;                 /* 最小触控高度 */
+  --maxw: 640px;
+  /* 字体 */
+  --font-body: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Hiragino Sans GB", sans-serif;
+  --font-serif: "Songti SC", "SimSun", "Noto Serif SC", "STSong", serif;
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text);
+  background:
+    radial-gradient(1200px 600px at 50% -10%, rgba(201, 162, 75, 0.08), transparent 60%),
+    linear-gradient(180deg, #14110C 0%, var(--ink-0) 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 容器：移动全宽，桌面居中 */
+.app {
+  width: 100%;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 16px 16px calc(32px + env(safe-area-inset-bottom));
+}
+
+/* ---------- 顶部品牌 ---------- */
+.brand { text-align: center; padding: 20px 0 12px; }
+.brand__mark { font-size: 22px; color: var(--gold); letter-spacing: .3em; }
+.brand__title {
+  font-family: var(--font-serif);
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: .28em;
+  margin: 6px 0 2px;
+  background: linear-gradient(180deg, var(--gold-bright), var(--gold));
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.brand__sub { font-size: 13px; color: var(--text-dim); letter-spacing: .32em; }
+.brand__rule {
+  height: 1px; width: 96px; margin: 14px auto 0;
+  background: linear-gradient(90deg, transparent, var(--line-strong), transparent);
+}
+
+/* ---------- 卡片 / 面板 ---------- */
+.panel {
+  background: linear-gradient(180deg, var(--ink-2), var(--ink-1));
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  padding: 18px 16px;
+  margin: 14px 0;
+}
+.panel__title {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 15px; font-weight: 600; color: var(--gold-bright);
+  letter-spacing: .06em; margin: 0 0 14px;
+}
+.panel__title::before {
+  content: ""; width: 4px; height: 16px; border-radius: 2px;
+  background: linear-gradient(180deg, var(--gold-bright), var(--gold-deep));
+}
+.section-title {
+  font-family: var(--font-serif);
+  font-size: 18px; color: var(--gold-bright); text-align: center;
+  letter-spacing: .18em; margin: 26px 0 6px;
+}
+
+/* ---------- 表单 ---------- */
+.field { margin: 14px 0; }
+.field__label { display: block; font-size: 14px; color: var(--text-dim); margin: 0 0 8px; letter-spacing: .04em; }
+.input, .select {
+  width: 100%; min-height: var(--tap);
+  background: var(--ink-0);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--text); font-size: 16px; font-family: var(--font-body);
+  padding: 0 14px;
+  transition: border-color .15s;
+  appearance: none; -webkit-appearance: none;
+}
+.input:focus, .select:focus { outline: none; border-color: var(--gold); }
+.select {
+  background-image: linear-gradient(45deg, transparent 50%, var(--gold) 50%), linear-gradient(135deg, var(--gold) 50%, transparent 50%);
+  background-position: right 18px center, right 13px center;
+  background-size: 5px 5px, 5px 5px; background-repeat: no-repeat;
+  padding-right: 36px;
+}
+/* 一行多个选择器（日期时间） */
+.field__row { display: flex; gap: 10px; }
+.field__row > * { flex: 1; }
+
+/* 分段控件（性别等） */
+.segmented {
+  display: flex; gap: 8px;
+  background: var(--ink-0); border: 1px solid var(--line);
+  border-radius: var(--radius-pill); padding: 5px;
+}
+.segmented__opt {
+  flex: 1; min-height: 42px; display: flex; align-items: center; justify-content: center;
+  border-radius: var(--radius-pill); font-size: 16px; color: var(--text-dim);
+  cursor: pointer; user-select: none; transition: all .18s; border: none; background: none;
+}
+.segmented__opt.is-active {
+  color: #241d10; font-weight: 700;
+  background: linear-gradient(180deg, var(--gold-bright), var(--gold));
+  box-shadow: 0 2px 10px rgba(201, 162, 75, .35);
+}
+
+/* ---------- 按钮 ---------- */
+.btn {
+  width: 100%; min-height: 54px;
+  border: none; border-radius: var(--radius-pill);
+  font-size: 17px; font-weight: 700; letter-spacing: .28em;
+  cursor: pointer; font-family: var(--font-serif);
+}
+.btn--primary {
+  color: #211a0d;
+  background: linear-gradient(180deg, var(--gold-bright), var(--gold) 60%, var(--gold-deep));
+  box-shadow: 0 6px 20px rgba(201, 162, 75, .32);
+}
+.btn--primary:active { transform: translateY(1px); }
+.btn--ghost {
+  color: var(--gold); background: rgba(201, 162, 75, .08);
+  border: 1px solid var(--line-strong);
+}
+
+/* ---------- 结果：统计网格 ---------- */
+.stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.stat {
+  background: var(--ink-0); border: 1px solid var(--line);
+  border-radius: var(--radius-sm); padding: 12px 14px;
+}
+.stat--wide { grid-column: 1 / -1; }
+.stat__label { font-size: 12px; color: var(--text-mute); letter-spacing: .06em; }
+.stat__value { font-size: 22px; font-weight: 700; color: var(--text); margin-top: 3px; font-family: var(--font-serif); }
+.stat__value--gold { color: var(--gold-bright); }
+.stat__note { font-size: 11px; color: var(--text-mute); margin-top: 4px; }
+
+/* 输入信息键值行 */
+.kv { display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-bottom: 1px dashed var(--line); }
+.kv:last-child { border-bottom: none; }
+.kv__k { font-size: 13px; color: var(--text-dim); flex-shrink: 0; }
+.kv__v { font-size: 14px; color: var(--text); text-align: right; }
+
+/* ---------- 卦象 ---------- */
+.gua { display: flex; align-items: center; justify-content: space-around; text-align: center; gap: 8px; }
+.gua__col { flex: 1; }
+.gua__glyph { font-size: 34px; color: var(--gold); line-height: 1; }
+.gua__name { font-family: var(--font-serif); font-size: 20px; color: var(--gold-bright); margin-top: 6px; }
+.gua__tag { font-size: 12px; color: var(--text-dim); margin-top: 2px; }
+.gua__main .gua__name { font-size: 26px; }
+
+/* ---------- 断语条目（本命条文） ---------- */
+.duanyu-item { padding: 12px 0; border-bottom: 1px solid var(--line); }
+.duanyu-item:last-child { border-bottom: none; }
+.duanyu-item__head { display: flex; align-items: baseline; gap: 8px; margin-bottom: 4px; }
+.duanyu-item__cat { font-size: 13px; color: var(--gold); font-weight: 600; }
+.duanyu-item__num { font-size: 12px; color: var(--text-mute); }
+.duanyu-item__text { font-size: 15px; color: var(--text); line-height: 1.6; }
+.vernacular {
+  margin-top: 5px; padding-left: 10px;
+  border-left: 2px solid rgba(159, 208, 168, .4);
+  font-size: 13px; color: var(--vernacular); line-height: 1.5;
+}
+
+/* ---------- 流年：分段标签 ---------- */
+.range-tabs { display: flex; gap: 8px; overflow-x: auto; padding: 4px 0 12px; -webkit-overflow-scrolling: touch; }
+.range-tab {
+  flex: 0 0 auto; min-height: 40px; padding: 0 16px;
+  display: flex; align-items: center; border-radius: var(--radius-pill);
+  font-size: 14px; color: var(--text-dim); background: var(--ink-0);
+  border: 1px solid var(--line); cursor: pointer; white-space: nowrap;
+}
+.range-tab.is-active { color: #241d10; font-weight: 700; background: linear-gradient(180deg, var(--gold-bright), var(--gold)); border-color: transparent; }
+
+/* ---------- 流年：可展开卡片 ---------- */
+.year-list { display: flex; flex-direction: column; gap: 10px; }
+.year-card {
+  background: linear-gradient(180deg, var(--ink-2), var(--ink-1));
+  border: 1px solid var(--line); border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.year-card__summary {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px; cursor: pointer; min-height: var(--tap);
+}
+.year-card__age {
+  flex: 0 0 auto; text-align: center; min-width: 52px;
+}
+.year-card__age b { display: block; font-family: var(--font-serif); font-size: 20px; color: var(--gold-bright); }
+.year-card__age span { display: block; font-size: 11px; color: var(--text-mute); }
+.year-card__gz { flex: 0 0 auto; font-family: var(--font-serif); font-size: 16px; color: var(--gold); min-width: 34px; }
+.year-card__lead { flex: 1; min-width: 0; font-size: 13px; color: var(--text-dim); line-height: 1.45; }
+.year-card__chev { flex: 0 0 auto; color: var(--gold); transition: transform .2s; font-size: 12px; }
+.year-card.is-open .year-card__chev { transform: rotate(180deg); }
+.year-card__detail { display: none; padding: 0 14px 14px; border-top: 1px solid var(--line); }
+.year-card.is-open .year-card__detail { display: block; }
+
+/* 展开内的条文块 */
+.tw { padding: 12px 0; border-bottom: 1px dashed var(--line); }
+.tw:last-child { border-bottom: none; }
+.tw__label { font-size: 12px; color: var(--gold); font-weight: 600; letter-spacing: .04em; }
+.tw__num { font-size: 12px; color: var(--text-mute); margin-left: 6px; }
+.tw__text { font-size: 14px; color: var(--text); margin-top: 3px; line-height: 1.55; }
+.tw__meta { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 8px; }
+.chip { font-size: 12px; color: var(--text-dim); background: var(--ink-0); border: 1px solid var(--line); border-radius: var(--radius-pill); padding: 3px 10px; }
+
+/* ---------- 杂项 ---------- */
+.loading { text-align: center; padding: 60px 20px; color: var(--text-dim); }
+.spinner {
+  width: 34px; height: 34px; margin: 0 auto 16px; border-radius: 50%;
+  border: 3px solid var(--line); border-top-color: var(--gold);
+  animation: spin .8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.actions { display: flex; gap: 10px; margin: 20px 0; }
+.actions .btn { flex: 1; }
+.foot { text-align: center; color: var(--text-mute); font-size: 12px; padding: 24px 8px; line-height: 1.7; }
+
+/* 桌面轻微放大留白 */
+@media (min-width: 640px) {
+  .app { padding: 24px 24px 48px; }
+  .brand__title { font-size: 34px; }
+}

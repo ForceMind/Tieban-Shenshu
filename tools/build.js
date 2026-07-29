@@ -34,6 +34,16 @@ async function minifyJs(src) {
   return r.code;
 }
 
+// 轻量 CSS 压缩：去注释、折叠空白、去多余符号周围空格
+function minifyCss(src) {
+  return src
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/\s+/g, ' ')
+    .replace(/\s*([{}:;,>])\s*/g, '$1')
+    .replace(/;}/g, '}')
+    .trim();
+}
+
 // 混淆 HTML 中所有无属性的内联 <script>（外链 <script src=...> 不匹配）
 async function processHtml(html) {
   const re = /<script>([\s\S]*?)<\/script>/g;
@@ -49,6 +59,11 @@ async function processHtml(html) {
 async function main() {
   fs.rmSync(DIST, { recursive: true, force: true });
   fs.mkdirSync(path.join(DIST, 'js'), { recursive: true });
+  fs.mkdirSync(path.join(DIST, 'css'), { recursive: true });
+
+  // 0) 样式：压缩
+  fs.writeFileSync(path.join(DIST, 'css/app.css'),
+    minifyCss(fs.readFileSync(path.join(SRC, 'css/app.css'), 'utf-8')));
 
   // 1) 算法：完整混淆
   fs.writeFileSync(path.join(DIST, 'js/tieban.js'),

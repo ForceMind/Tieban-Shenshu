@@ -32,6 +32,7 @@
 
 ```
 index.html  result.html  Print.html
+css/app.css
 js/lunar.js  js/db-data.js  js/tieban.js  js/duanyu-modern.js
 ```
 
@@ -62,9 +63,10 @@ python server.py          # 访问 http://127.0.0.1:8000
 
 ```
 ├── index.html            # 输入表单
-├── result.html           # 结果展示
-├── Print.html            # 打印版
-├── js/                   # 纯前端运行所需（部署仅需此目录 + 上述 HTML）
+├── result.html           # 结果展示（移动优先，流年可展开卡片）
+├── Print.html            # 完整报告 / 打印版
+├── css/app.css           # 共享设计系统（现代国风，移动优先）
+├── js/                   # 纯前端运行所需（部署仅需此目录 + 上述 HTML + css/）
 │   ├── lunar.js          # 农历/八字换算库（lunar-javascript）
 │   ├── db-data.js        # 由 DB/*.csv 导出的数据（window.TIEBAN_DB）
 │   ├── tieban.js         # 核心算法（由 main.py 移植）
@@ -89,6 +91,12 @@ python server.py          # 访问 http://127.0.0.1:8000
 JS 输出经逐项校验与 Python 参照实现一致（八字换算 1300+ 例、完整排盘结果 170+ 例）。
 
 ## 更新日志
+
+### v3.2
+- 前端整体重设计为**移动优先的现代国风**（深墨底 + 酱金，大字号、大触控区、卡片化）
+- 新增共享设计系统 `css/app.css`
+- 流年改为**可展开卡片**（解决旧版 15 列宽表在手机上难用的问题），点开看三种条文/白话/八卦加则
+- 首页改用原生日期时间选择器，提升移动端输入体验
 
 ### v3.1
 - 流年表在虚岁旁增加对应公历年份
