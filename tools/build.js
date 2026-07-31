@@ -61,6 +61,9 @@ async function main() {
   fs.mkdirSync(path.join(DIST, 'js'), { recursive: true });
   fs.mkdirSync(path.join(DIST, 'css'), { recursive: true });
 
+  // 0a) favicon：直接复制
+  fs.copyFileSync(path.join(SRC, 'favicon.svg'), path.join(DIST, 'favicon.svg'));
+
   // 0) 样式：压缩
   fs.writeFileSync(path.join(DIST, 'css/app.css'),
     minifyCss(fs.readFileSync(path.join(SRC, 'css/app.css'), 'utf-8')));

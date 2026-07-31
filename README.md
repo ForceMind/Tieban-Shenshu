@@ -31,7 +31,7 @@
 打包以下文件（保持目录结构），在 Cloudflare Pages 选择「直接上传（Direct Upload）」拖入即可，无需构建命令与环境变量：
 
 ```
-index.html  result.html  Print.html
+index.html  result.html  Print.html  favicon.svg
 css/app.css
 js/lunar.js  js/db-data.js  js/tieban.js  js/duanyu-modern.js  js/terms.js
 ```
