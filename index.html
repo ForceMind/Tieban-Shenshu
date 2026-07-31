@@ -3,17 +3,18 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#F6F3EC">
   <title>铁板神数 · 先天考刻推演</title>
   <link rel="stylesheet" href="css/app.css">
   <style>
-    .note { font-size: 12px; color: var(--text-mute); margin: 8px 2px 0; }
+    .intro { font-size: 13px; color: var(--ink-2); line-height: 1.7; margin: 2px 4px 14px; }
     .err {
-      display: none; margin: 14px 0 0; padding: 12px 14px; border-radius: var(--radius-sm);
-      background: rgba(208, 148, 110, .14); border: 1px solid rgba(208, 148, 110, .5);
-      color: var(--terra); font-size: 14px; text-align: center;
+      display: none; margin: 12px 0 0; padding: 11px 14px; border-radius: var(--radius-sm);
+      background: var(--cinnabar-soft); border: 1px solid rgba(181, 68, 52, .35);
+      color: var(--cinnabar); font-size: 14px; text-align: center;
     }
     .overlay {
-      position: fixed; inset: 0; background: rgba(16, 14, 11, .8); backdrop-filter: blur(3px);
+      position: fixed; inset: 0; background: rgba(246, 243, 236, .88); backdrop-filter: blur(3px);
       display: none; align-items: center; justify-content: center; z-index: 20;
     }
     .overlay.is-on { display: flex; }
@@ -22,21 +23,23 @@
 <body>
   <div class="app">
     <div class="brand">
-      <div class="brand__mark">☰</div>
-      <div class="brand__title">铁板神数</div>
-      <div class="brand__sub">先天考刻推演</div>
-      <div class="brand__rule"></div>
+      <div class="brand__seal">铁</div>
+      <div>
+        <div class="brand__name">铁板神数</div>
+        <div class="brand__tag">先天考刻推演</div>
+      </div>
     </div>
+    <p class="intro">输入出生时间，推演先天命数、本命卦与 1–108 岁流年条文，所有断语附现代白话解释。数据仅在本机计算，不上传。</p>
 
     <form id="mainForm" novalidate>
-      <div class="panel">
-        <div class="panel__title">基本信息</div>
+      <div class="card">
+        <div class="card__title">基本信息</div>
 
         <div class="field">
           <label class="field__label">性别</label>
           <div class="segmented" id="genderSeg" role="group" aria-label="性别">
-            <button type="button" class="segmented__opt is-active" data-gender="男">乾 · 男</button>
-            <button type="button" class="segmented__opt" data-gender="女">坤 · 女</button>
+            <button type="button" class="segmented__opt is-active" data-gender="男">男</button>
+            <button type="button" class="segmented__opt" data-gender="女">女</button>
           </div>
         </div>
 
@@ -46,17 +49,16 @@
             <input class="input" type="date" id="birthDate" min="1864-01-01" max="2043-12-31" required>
             <input class="input" type="time" id="birthTime" required>
           </div>
-          <p class="note">精确到分钟；分钟会影响「刻别」，请尽量准确。</p>
+          <p class="field__hint">请精确到分钟——两小时分为八刻，出生落在哪一刻会直接影响推演结果。</p>
         </div>
       </div>
 
-      <div class="panel">
-        <div class="panel__title">求测时间</div>
+      <div class="card">
+        <div class="card__title">求测时间 <small>默认当前，一般无需修改</small></div>
         <div class="field__row">
           <input class="input" type="date" id="queryDate" required>
           <input class="input" type="time" id="queryTime" required>
         </div>
-        <p class="note">默认当前时间，一般无需修改。</p>
       </div>
 
       <button class="btn btn--primary" type="submit">开始推演</button>
@@ -78,11 +80,9 @@
   <script src="js/tieban.js"></script>
   <script>
     var selectedGender = "男";
-
     function pad2(n) { return (n < 10 ? "0" : "") + n; }
     function $(id) { return document.getElementById(id); }
 
-    // 性别分段
     $("genderSeg").addEventListener("click", function (e) {
       var b = e.target.closest(".segmented__opt");
       if (!b) return;
@@ -90,7 +90,6 @@
       this.querySelectorAll(".segmented__opt").forEach(function (o) { o.classList.toggle("is-active", o === b); });
     });
 
-    // 默认值
     (function initDefaults() {
       var now = new Date();
       $("birthDate").value = "1990-05-15";

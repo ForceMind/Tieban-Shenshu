@@ -3,27 +3,34 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#F6F3EC">
   <title>铁板神数 · 推演结果</title>
   <link rel="stylesheet" href="css/app.css">
   <style>
-    /* 页面特有的少量样式（其余复用 app.css） */
-    .placeholder { text-align: center; color: var(--text-dim); font-size: 14px; padding: 24px 8px; line-height: 1.7; }
-    .placeholder small { display: block; color: var(--text-mute); font-size: 12px; margin-top: 8px; }
-    /* 校正后条文块视觉突出为主判读 */
-    .tw--main { background: rgba(201, 162, 75, .06); border: 1px solid var(--line-strong); border-radius: var(--radius-sm); padding: 12px; margin: 4px 0; }
-    .tw--main .tw__label { color: var(--gold-bright); }
-    .tw--main .tw__text { color: var(--text); }
-    .tw__label .tw__badge { font-weight: 400; color: var(--text-mute); letter-spacing: 0; margin-left: 6px; font-size: 11px; }
+    /* 页面特有少量样式（其余复用 app.css v2） */
+    html { scroll-behavior: smooth; }
+    section[id] { scroll-margin-top: 60px; }
+    .placeholder { text-align: center; color: var(--ink-2); font-size: 14px; padding: 22px 8px; line-height: 1.7; }
+    .placeholder small { display: block; color: var(--ink-3); font-size: 12px; margin-top: 8px; }
+    .liunian-title { font-size: 16px; font-weight: 700; margin: 18px 2px 8px; }
   </style>
 </head>
 <body>
   <div class="app">
     <div class="brand">
-      <div class="brand__mark">☰</div>
-      <div class="brand__title">铁板神数</div>
-      <div class="brand__sub">先天考刻推演</div>
-      <div class="brand__rule"></div>
+      <div class="brand__seal">铁</div>
+      <div>
+        <div class="brand__name">铁板神数</div>
+        <div class="brand__tag">先天考刻推演</div>
+      </div>
     </div>
+
+    <nav class="nav" id="topNav">
+      <a class="nav__chip is-active" href="#sec-hero">概览</a>
+      <a class="nav__chip" href="#sec-basic">排盘</a>
+      <a class="nav__chip" href="#sec-destiny">本命</a>
+      <a class="nav__chip" href="#sec-liunian">流年</a>
+    </nav>
 
     <div id="root">
       <div class="loading">
@@ -33,56 +40,67 @@
     </div>
   </div>
 
+  <script src="js/terms.js"></script>
   <script src="js/duanyu-modern.js"></script>
   <script>
-    // 取某条文言断语的现代白话；无对应或为空时返回空串
+    // ---------- 工具 ----------
+    var TERMS = window.TIEBAN_TERMS || {};
+    function esc(v) { return (v === null || v === undefined) ? '' : v; }
+    function termShort(name) { return (TERMS[name] && TERMS[name].short) || ''; }
+    function termDetail(name) { return (TERMS[name] && TERMS[name].detail) || ''; }
     function modernOf(t) {
       if (!t || t === '未找到断语' || t === '—') return '';
       return (window.DUANYU_MODERN || {})[t] || '';
     }
-
-    // 卦象数据 - 每个卦一个符号（三爻）与五行
-    var guaMap = {
-      "乾": { lines: "☰", element: "金" },
-      "坤": { lines: "☷", element: "土" },
-      "震": { lines: "☳", element: "木" },
-      "巽": { lines: "☴", element: "木" },
-      "坎": { lines: "☵", element: "水" },
-      "离": { lines: "☲", element: "火" },
-      "艮": { lines: "☶", element: "土" },
-      "兑": { lines: "☱", element: "金" }
-    };
-
-    // 十二辟卦组成映射（上卦 + 下卦）
-    var twelveHexMap = {
-      "乾": { shang: "乾", xia: "乾" },
-      "夬": { shang: "兑", xia: "乾" },
-      "大壮": { shang: "震", xia: "乾" },
-      "泰": { shang: "坤", xia: "乾" },
-      "临": { shang: "坤", xia: "兑" },
-      "复": { shang: "坤", xia: "震" },
-      "坤": { shang: "坤", xia: "坤" },
-      "剥": { shang: "艮", xia: "坤" },
-      "观": { shang: "巽", xia: "坤" },
-      "否": { shang: "乾", xia: "坤" },
-      "遁": { shang: "乾", xia: "艮" },
-      "姤": { shang: "乾", xia: "巽" }
-    };
-
-    function esc(v) { return (v === null || v === undefined) ? '' : v; }
-
-    // 断语下方白话（若有）
-    function vernacularHtml(text) {
-      var m = modernOf(text);
+    function vernacularHtml(t) {
+      var m = modernOf(t);
       return m ? '<div class="vernacular">' + m + '</div>' : '';
+    }
+    function truncate(s, n) { s = s || ''; return s.length > n ? s.slice(0, n) + '…' : s; }
+
+    // 卦象映射
+    var guaMap = {
+      "乾": { lines: "☰", element: "金" }, "坤": { lines: "☷", element: "土" },
+      "震": { lines: "☳", element: "木" }, "巽": { lines: "☴", element: "木" },
+      "坎": { lines: "☵", element: "水" }, "离": { lines: "☲", element: "火" },
+      "艮": { lines: "☶", element: "土" }, "兑": { lines: "☱", element: "金" }
+    };
+    var twelveHexMap = {
+      "乾": { shang: "乾", xia: "乾" }, "夬": { shang: "兑", xia: "乾" },
+      "大壮": { shang: "震", xia: "乾" }, "泰": { shang: "坤", xia: "乾" },
+      "临": { shang: "坤", xia: "兑" }, "复": { shang: "坤", xia: "震" },
+      "坤": { shang: "坤", xia: "坤" }, "剥": { shang: "艮", xia: "坤" },
+      "观": { shang: "巽", xia: "坤" }, "否": { shang: "乾", xia: "坤" },
+      "遁": { shang: "乾", xia: "艮" }, "姤": { shang: "乾", xia: "巽" }
+    };
+
+    // ---------- Hero 命盘核心 ----------
+    function renderHero(data, result) {
+      var b = data.info_b || {};
+      var lunar = (b.lunar_str || '');
+      // 尽量取「x月xx」简写；取不到用全串
+      var lunarShort = lunar.replace(/^[^年]*年/, '') || lunar;
+      var chips = [];
+      if (result.moment_cn) chips.push('刻别 ' + esc(result.moment_cn));
+      if (result.main_num !== undefined && result.main_num !== null && result.main_num !== '') chips.push('本命数 ' + esc(result.main_num));
+      if (result.cong_num !== undefined && result.cong_num !== null && result.cong_num !== '') chips.push('先天命数 ' + esc(result.cong_num));
+      var who = [esc(data.gender), truncate(lunarShort, 10)].filter(function (s) { return s; }).join(' · ');
+      if (who) chips.push(who);
+
+      var html = '<section id="sec-hero"><div class="hero">';
+      html += '<div class="hero__label">本命卦</div>';
+      html += '<div class="hero__gua">' + (esc(result.hex_name) || '—') + '</div>';
+      html += '<div class="hero__line">' + (termShort('十二辟卦') || '标记你的命局类型') + '</div>';
+      html += '<div class="hero__chips">';
+      chips.forEach(function (c) { html += '<span class="chip">' + c + '</span>'; });
+      html += '</div></div></section>';
+      return html;
     }
 
     // ---------- 输入信息 ----------
     function renderInfo(data) {
-      var b = data.info_b || {};
-      var q = data.info_q || {};
-      var bz = b.bazi || {};
-      var qz = q.bazi || {};
+      var b = data.info_b || {}, q = data.info_q || {};
+      var bz = b.bazi || {}, qz = q.bazi || {};
       var rows = [
         ['性别', esc(data.gender)],
         ['出生（公历）', esc(b.date_str)],
@@ -92,32 +110,35 @@
         ['求测（公历）', esc(q.date_str)],
         ['求测八字', [qz.year, qz.month, qz.day, qz.time].map(esc).join(' ')]
       ];
-      var html = '<div class="panel"><div class="panel__title">输入信息</div>';
+      var html = '<div class="card"><div class="card__title">输入信息</div>';
       rows.forEach(function (r) {
-        html += '<div class="kv"><span class="kv__k">' + r[0] + '</span><span class="kv__v">' + r[1] + '</span></div>';
+        html += '<div class="kv"><span class="kv__k">' + r[0] + '</span><span class="kv__v">' + (r[1] || '—') + '</span></div>';
       });
       html += '</div>';
       return html;
     }
 
-    // ---------- 基础排盘 ----------
+    // ---------- 基础排盘（可点击看解释） ----------
     function renderBasic(result) {
       var dlc = result.day_life_calc || '';
       var dayM = dlc.match(/日命:(\d+)/);
       var timeM = dlc.match(/时运:(\d+)/);
-      var dayLife = dayM ? dayM[1] : '?';
-      var timeLuck = timeM ? timeM[1] : '?';
+      var dayLife = dayM ? dayM[1] : '—';
+      var timeLuck = timeM ? timeM[1] : '—';
 
-      function stat(label, value, goldValue, note) {
-        var vClass = 'stat__value' + (goldValue ? ' stat__value--gold' : '');
-        var h = '<div class="stat"><div class="stat__label">' + label + '</div>';
-        h += '<div class="' + vClass + '">' + esc(value) + '</div>';
+      function stat(term, value, accent, note) {
+        var vClass = 'stat__value' + (accent ? ' stat__value--accent' : '');
+        var h = '<div class="stat" data-term="' + term + '">';
+        h += '<div class="stat__label">' + term + '<i class="stat__info">i</i></div>';
+        h += '<div class="' + vClass + '">' + (esc(value) === '' ? '—' : esc(value)) + '</div>';
         if (note) h += '<div class="stat__note">' + note + '</div>';
         h += '</div>';
         return h;
       }
 
-      var html = '<div class="panel"><div class="panel__title">基础排盘</div><div class="stat-grid">';
+      var html = '<section id="sec-basic"><div class="card">';
+      html += '<div class="card__title">基础排盘 <small>点任意参数看白话解释</small></div>';
+      html += '<div class="stat-grid" id="statGrid">';
       html += stat('先天命数', result.cong_num);
       html += stat('五音命数', result.tone_num);
       html += stat('日命数', dayLife);
@@ -127,11 +148,15 @@
       html += stat('十二辟卦', result.hex_name, true);
       html += stat('后天命数', result.pn_num);
       if (result.san_yuan) html += stat('三元九运', result.san_yuan);
+      if (result.final_fortune_num !== undefined && result.final_fortune_num !== null && result.final_fortune_num !== '') {
+        html += stat('终局条文数', result.final_fortune_num);
+      }
 
       // 五数寄宫（宽）
       if (result.wu_shu_ji_gong) {
         var w = result.wu_shu_ji_gong;
-        html += '<div class="stat stat--wide"><div class="stat__label">五数寄宫</div>';
+        html += '<div class="stat stat--wide" data-term="五数寄宫">';
+        html += '<div class="stat__label">五数寄宫<i class="stat__info">i</i></div>';
         html += '<div class="stat__value" style="font-size:16px;">' +
           esc(w.original) + ' → ' + esc(w['寄宫卦']) + ' → ' + esc(w['实际命数']) + '</div>';
         if (w['依据']) html += '<div class="stat__note">依据：' + esc(w['依据']) + '</div>';
@@ -141,14 +166,17 @@
       // 八卦加则（宽）
       if (result.bagua_jiaze) {
         var j = result.bagua_jiaze;
-        html += '<div class="stat stat--wide"><div class="stat__label">八卦加则</div>';
+        html += '<div class="stat stat--wide" data-term="八卦加则">';
+        html += '<div class="stat__label">八卦加则<i class="stat__info">i</i></div>';
         html += '<div class="stat__value" style="font-size:16px;">' +
           esc(j['卦名']) + ' ｜ 起始 ' + esc(j['起始数']) + '</div>';
         if (j['规则']) html += '<div class="stat__note">' + esc(j['规则']) + '</div>';
         html += '</div>';
       }
 
-      html += '</div></div>';
+      html += '</div>'; // stat-grid
+      html += '<div class="explain" id="explainBox"></div>';
+      html += '</div></section>';
       return html;
     }
 
@@ -168,11 +196,11 @@
       var sg = guaMap[shangName] || guaMap['乾'];
       var xg = guaMap[xiaName] || guaMap['坤'];
 
-      var html = '<div class="panel"><div class="panel__title">卦象</div><div class="gua">';
+      var html = '<div class="card"><div class="card__title">卦象 <small>' + termShort('卦象') + '</small></div><div class="gua">';
       html += '<div class="gua__col"><div class="gua__glyph">' + sg.lines + '</div>' +
         '<div class="gua__name">' + shangName + '</div><div class="gua__tag">上卦 · ' + sg.element + '</div></div>';
       html += '<div class="gua__col gua__main"><div class="gua__glyph" style="opacity:.35;">☯</div>' +
-        '<div class="gua__name">' + esc(hexName) + '</div><div class="gua__tag">本卦</div></div>';
+        '<div class="gua__name">' + (esc(hexName) || '—') + '</div><div class="gua__tag">本卦</div></div>';
       html += '<div class="gua__col"><div class="gua__glyph">' + xg.lines + '</div>' +
         '<div class="gua__name">' + xiaName + '</div><div class="gua__tag">下卦 · ' + xg.element + '</div></div>';
       html += '</div></div>';
@@ -182,13 +210,13 @@
     // ---------- 本命条文 ----------
     function renderDestiny(result) {
       var tbl = result.tbl_data;
-      var html = '<div class="panel"><div class="panel__title">本命条文</div>';
+      var html = '<section id="sec-destiny"><div class="card"><div class="card__title">本命条文</div>';
 
       if (!tbl || !tbl.offsets) {
         html += '<div class="placeholder">暂无本命条文数据' +
-          '<small>十二辟卦：' + esc(result.hex_name) + ' ｜ 刻别：' + esc(result.moment_cn) +
-          ' ｜ 先天命数：' + esc(result.cong_num) + '</small>' +
-          '<small>注：并非所有命数组合都有对应的本命条文记录</small></div></div>';
+          '<small>十二辟卦：' + (esc(result.hex_name) || '—') + ' ｜ 刻别：' + (esc(result.moment_cn) || '—') +
+          ' ｜ 先天命数：' + (esc(result.cong_num) || '—') + '</small>' +
+          '<small>注：并非所有命数组合都有对应的本命条文记录</small></div></div></section>';
         return html;
       }
 
@@ -197,7 +225,7 @@
       var hasData = false;
 
       categories.forEach(function (cat) {
-        var offsets = tbl.offsets[cat] || [];
+        var offsets = (tbl.offsets && tbl.offsets[cat]) || [];
         var duanyus = (tbl.duanyus && tbl.duanyus[cat]) || [];
         if (!offsets.length) return;
         hasData = true;
@@ -214,107 +242,26 @@
         });
       });
 
-      if (!hasData) {
-        html += '<div class="placeholder">本命条文各属性暂无偏移数据</div>';
-      }
-      html += '</div>';
+      if (!hasData) html += '<div class="placeholder">本命条文各属性暂无偏移数据</div>';
+      html += '</div></section>';
       return html;
     }
 
     // ---------- 流年 ----------
-    function truncate(s, n) {
-      s = s || '';
-      return s.length > n ? s.slice(0, n) + '…' : s;
-    }
-
-    function twBlock(label, num, text, metaChips, isMain) {
+    function twBlock(label, num, text, isMain) {
       text = text || '未找到断语';
-      var cls = 'tw' + (isMain ? ' tw--main' : '');
-      var h = '<div class="' + cls + '">';
+      var h = '<div class="tw' + (isMain ? ' tw--main' : '') + '">';
       h += '<div class="tw__label">' + label +
         (isMain ? '<span class="tw__badge">主判读</span>' : '') +
         (num !== undefined && num !== null && num !== '' ? '<span class="tw__num">条文 ' + num + '</span>' : '') +
         '</div>';
       h += '<div class="tw__text">' + text + '</div>';
       h += vernacularHtml(text);
-      if (metaChips && metaChips.length) {
-        h += '<div class="tw__meta">';
-        metaChips.forEach(function (c) { h += '<span class="chip">' + c + '</span>'; });
-        h += '</div>';
-      }
       h += '</div>';
       return h;
     }
 
-    function renderLiunian(liunian, birthYear) {
-      var html = '<div class="section-title">流年条文</div>';
-
-      if (!liunian || !liunian.length) {
-        html += '<div class="panel"><div class="placeholder">暂无流年数据</div></div>';
-        return html;
-      }
-
-      var ranges = [
-        { key: 'r1', label: '1-30岁', start: 1, end: 30 },
-        { key: 'r2', label: '31-60岁', start: 31, end: 60 },
-        { key: 'r3', label: '61-90岁', start: 61, end: 90 },
-        { key: 'r4', label: '91-108岁', start: 91, end: 108 }
-      ];
-
-      // 分段标签
-      html += '<div class="range-tabs" id="rangeTabs">';
-      ranges.forEach(function (r, i) {
-        html += '<button type="button" class="range-tab' + (i === 0 ? ' is-active' : '') +
-          '" data-range="' + r.key + '">' + r.label + '</button>';
-      });
-      html += '</div>';
-
-      // 每段 year-list
-      ranges.forEach(function (r, i) {
-        html += '<div class="year-list" id="' + r.key + '"' + (i === 0 ? '' : ' style="display:none;"') + '>';
-        var items = liunian.filter(function (it) { return it.age >= r.start && it.age <= r.end; });
-        if (!items.length) {
-          html += '<div class="placeholder">本段暂无数据</div>';
-        }
-        items.forEach(function (item) {
-          var age = item.age;
-          var gLYear = birthYear ? (birthYear + age - 1) : '';
-          var lead = truncate(item.corrected_duanyu || item.original_duanyu || '', 34);
-
-          html += '<div class="year-card">';
-          html += '<div class="year-card__summary">';
-          html += '<div class="year-card__age"><b>' + age + '岁</b><span>' + gLYear + '</span></div>';
-          html += '<div class="year-card__gz">' + esc(item.year) + '</div>';
-          html += '<div class="year-card__lead">' + (lead || '—') + '</div>';
-          html += '<div class="year-card__chev">▾</div>';
-          html += '</div>';
-
-          // detail
-          html += '<div class="year-card__detail">';
-
-          // 原条文
-          html += twBlock('原条文', item.original_fortune, item.original_duanyu,
-            metaFor(item), false);
-
-          // 校正后条文（主判读）
-          html += twBlock('校正后条文', item.corrected_fortune, item.corrected_duanyu,
-            metaFor(item), true);
-
-          // 铁板公式
-          html += twBlock('铁板公式', item.tieban_fortune, item.tieban_duanyu,
-            null, false);
-
-          html += '</div>'; // detail
-          html += '</div>'; // year-card
-        });
-        html += '</div>'; // year-list
-      });
-
-      return html;
-    }
-
-    // 组装 meta chips
-    function metaFor(item) {
+    function metaChips(item) {
       var chips = [];
       if (item.sound) chips.push('五音 ' + item.sound);
       if (item.marker) chips.push('标记 ' + item.marker);
@@ -325,27 +272,124 @@
       return chips;
     }
 
+    function renderLiunian(liunian, birthYear) {
+      var html = '<section id="sec-liunian">';
+      html += '<div class="liunian-title">流年条文（1–108 岁）</div>';
+
+      // 引导框：三种条文怎么看
+      html += '<div class="howto"><b>三种条文怎么看</b><br>';
+      html += '① 原条文：由该岁的「字母」和年龄直接查表得到，是最原始的一层。<br>';
+      html += '② <b>校正后条文：按年龄规则修正校正数后重新落定的条文，传统上这才是该岁真正落定的断语，以它为主。</b><br>';
+      html += '③ 铁板公式：把原条文数代入核心公式（原条文数 + 刻干数 × 48）得到的「终局」口径，可与校正后条文互相参照。';
+      html += '</div>';
+
+      if (!liunian || !liunian.length) {
+        html += '<div class="card"><div class="placeholder">暂无流年数据</div></div></section>';
+        return html;
+      }
+
+      var ranges = [
+        { key: 'r1', label: '1-30岁', start: 1, end: 30 },
+        { key: 'r2', label: '31-60岁', start: 31, end: 60 },
+        { key: 'r3', label: '61-90岁', start: 61, end: 90 },
+        { key: 'r4', label: '91-108岁', start: 91, end: 108 }
+      ];
+
+      html += '<div class="range-tabs" id="rangeTabs">';
+      ranges.forEach(function (r, i) {
+        html += '<button type="button" class="range-tab' + (i === 0 ? ' is-active' : '') +
+          '" data-range="' + r.key + '">' + r.label + '</button>';
+      });
+      html += '</div>';
+
+      ranges.forEach(function (r, i) {
+        html += '<div class="year-list" id="' + r.key + '"' + (i === 0 ? '' : ' style="display:none;"') + '>';
+        var items = liunian.filter(function (it) { return it.age >= r.start && it.age <= r.end; });
+        if (!items.length) html += '<div class="placeholder">本段暂无数据</div>';
+
+        items.forEach(function (item) {
+          var age = item.age || '';
+          var gYear = (birthYear && age) ? (birthYear + age - 1) : '';
+          var lead = truncate(item.corrected_duanyu || item.original_duanyu || '', 34);
+
+          html += '<div class="year-card">';
+          html += '<div class="year-card__summary">';
+          html += '<div class="year-card__age"><b>' + age + '岁</b><span>' + gYear + '</span></div>';
+          html += '<div class="year-card__gz">' + esc(item.year) + '</div>';
+          html += '<div class="year-card__lead">' + (lead || '—') + '</div>';
+          html += '<div class="year-card__chev">▾</div>';
+          html += '</div>';
+
+          html += '<div class="year-card__detail">';
+          html += twBlock('原条文', item.original_fortune, item.original_duanyu, false);
+          html += twBlock('校正后条文', item.corrected_fortune, item.corrected_duanyu, true);
+          html += twBlock('铁板公式', item.tieban_fortune, item.tieban_duanyu, false);
+          var chips = metaChips(item);
+          if (chips.length) {
+            html += '<div class="tw__meta">';
+            chips.forEach(function (c) { html += '<span class="chip">' + c + '</span>'; });
+            html += '</div>';
+          }
+          html += '</div>'; // detail
+          html += '</div>'; // year-card
+        });
+        html += '</div>'; // year-list
+      });
+
+      html += '</section>';
+      return html;
+    }
+
     // ---------- 底部操作 + 页脚 ----------
     function renderActions() {
       return '<div class="actions">' +
-        '<button class="btn btn--ghost" id="btnBack">返回首页</button>' +
-        '<button class="btn btn--primary" id="btnPrint">打印报告</button>' +
+        '<button type="button" class="btn btn--ghost" id="btnBack">返回重排</button>' +
+        '<button type="button" class="btn btn--primary" id="btnReport">查看完整报告</button>' +
         '</div>' +
         '<div class="foot">仅供传统文化研习与娱乐，不构成任何决策依据。</div>';
     }
 
     // ---------- 交互绑定 ----------
     function bindEvents() {
-      // range 切换
+      var root = document.getElementById('root');
+
+      // 基础排盘：点参数看白话解释（事件委托，互斥高亮）
+      root.addEventListener('click', function (e) {
+        var stat = e.target.closest('.stat[data-term]');
+        if (stat) {
+          var box = document.getElementById('explainBox');
+          var wasActive = stat.classList.contains('is-active');
+          root.querySelectorAll('.stat.is-active').forEach(function (s) { s.classList.remove('is-active'); });
+          if (box) {
+            if (wasActive) {
+              box.classList.remove('is-on');
+              box.innerHTML = '';
+            } else {
+              stat.classList.add('is-active');
+              var term = stat.dataset.term || '';
+              box.innerHTML = '<b>' + term + '</b>：' + (termDetail(term) || '暂无解释');
+              box.classList.add('is-on');
+            }
+          }
+          return;
+        }
+
+        // year-card 展开/收起
+        var summary = e.target.closest('.year-card__summary');
+        if (summary) {
+          var card = summary.closest('.year-card');
+          if (card) card.classList.toggle('is-open');
+        }
+      });
+
+      // 流年分段切换
       var tabs = document.getElementById('rangeTabs');
       if (tabs) {
         tabs.addEventListener('click', function (e) {
           var b = e.target.closest('.range-tab');
           if (!b) return;
           var key = b.dataset.range;
-          this.querySelectorAll('.range-tab').forEach(function (t) {
-            t.classList.toggle('is-active', t === b);
-          });
+          this.querySelectorAll('.range-tab').forEach(function (t) { t.classList.toggle('is-active', t === b); });
           ['r1', 'r2', 'r3', 'r4'].forEach(function (id) {
             var el = document.getElementById(id);
             if (el) el.style.display = (id === key) ? '' : 'none';
@@ -353,52 +397,54 @@
         });
       }
 
-      // year-card 展开/收起（事件委托）
-      var root = document.getElementById('root');
-      root.addEventListener('click', function (e) {
-        var summary = e.target.closest('.year-card__summary');
-        if (!summary) return;
-        var card = summary.closest('.year-card');
-        if (card) card.classList.toggle('is-open');
-      });
-
-      // 返回首页（保留表单）
+      // 底部按钮
       var back = document.getElementById('btnBack');
-      if (back) back.addEventListener('click', function () {
-        try {
-          var data = JSON.parse(localStorage.getItem('tiebanshushu_result') || 'null');
-          if (data && data.birth_info) {
-            var formData = {
-              gender: data.gender,
-              birth: (data.birth_info && data.birth_info.birth_dt) || {},
-              query: (data.query_info && data.query_info.query_dt) || {}
-            };
-            localStorage.setItem('tiebanshushu_form', JSON.stringify(formData));
-          }
-        } catch (err) { /* ignore */ }
-        location.href = 'index.html';
-      });
+      if (back) back.addEventListener('click', function () { location.href = 'index.html'; });
+      var report = document.getElementById('btnReport');
+      if (report) report.addEventListener('click', function () { location.href = 'Print.html'; });
 
-      // 打印
-      var print = document.getElementById('btnPrint');
-      if (print) print.addEventListener('click', function () {
-        window.open('Print.html');
-      });
-
-      // Ctrl+P 打印
-      document.addEventListener('keydown', function (e) {
-        if (e.ctrlKey && (e.key === 'p' || e.key === 'P')) {
-          e.preventDefault();
-          window.open('Print.html');
+      // 吸顶导航：点击平滑滚动 + 滚动高亮（失败不报错）
+      try {
+        var nav = document.getElementById('topNav');
+        var chips = nav ? Array.prototype.slice.call(nav.querySelectorAll('.nav__chip')) : [];
+        function setActiveChip(hash) {
+          chips.forEach(function (c) {
+            c.classList.toggle('is-active', c.getAttribute('href') === hash);
+          });
         }
-      });
+        if (nav) {
+          nav.addEventListener('click', function (e) {
+            var a = e.target.closest('.nav__chip');
+            if (!a) return;
+            var target = document.querySelector(a.getAttribute('href') || '');
+            if (target) {
+              e.preventDefault();
+              target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              setActiveChip(a.getAttribute('href'));
+            }
+          });
+        }
+        if ('IntersectionObserver' in window) {
+          var visible = {};
+          var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (en) { visible[en.target.id] = en.isIntersecting; });
+            var order = ['sec-liunian', 'sec-destiny', 'sec-basic', 'sec-hero'];
+            for (var i = 0; i < order.length; i++) {
+              if (visible[order[i]]) { setActiveChip('#' + order[i]); break; }
+            }
+          }, { rootMargin: '-56px 0px -55% 0px' });
+          ['sec-hero', 'sec-basic', 'sec-destiny', 'sec-liunian'].forEach(function (id) {
+            var el = document.getElementById(id);
+            if (el) io.observe(el);
+          });
+        }
+      } catch (err) { /* 导航高亮失败不影响主流程 */ }
     }
 
     function renderError(msg) {
       document.getElementById('root').innerHTML =
-        '<div class="panel"><div class="placeholder" style="color:var(--terra);">排盘失败<small>' +
-        esc(msg) + '</small></div>' +
-        '<button class="btn btn--primary" onclick="location.href=\'index.html\'">返回首页</button></div>';
+        '<div class="card"><div class="placeholder">排盘失败<small>' + esc(msg) + '</small></div>' +
+        '<button type="button" class="btn btn--primary" onclick="location.href=\'index.html\'">返回首页</button></div>';
     }
 
     // ---------- 入口 ----------
@@ -416,6 +462,7 @@
       var birthYear = parseInt((data.info_b && data.info_b.date_str) || '', 10) || 0;
 
       var html = '';
+      html += renderHero(data, result);
       html += renderInfo(data);
       html += renderBasic(result);
       html += renderGua(result.hex_name);

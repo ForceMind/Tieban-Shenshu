@@ -33,7 +33,7 @@
 ```
 index.html  result.html  Print.html
 css/app.css
-js/lunar.js  js/db-data.js  js/tieban.js  js/duanyu-modern.js
+js/lunar.js  js/db-data.js  js/tieban.js  js/duanyu-modern.js  js/terms.js
 ```
 
 同样适用于 GitHub Pages、Vercel、Netlify，或本地直接用浏览器打开 `index.html`。
@@ -63,14 +63,15 @@ python server.py          # 访问 http://127.0.0.1:8000
 
 ```
 ├── index.html            # 输入表单
-├── result.html           # 结果展示（移动优先，流年可展开卡片）
-├── Print.html            # 完整报告 / 打印版
-├── css/app.css           # 共享设计系统（现代国风，移动优先）
+├── result.html           # 结果展示（移动优先，参数可点看白话解释，流年可展开卡片）
+├── Print.html            # 完整报告 / 打印版（含名词白话对照表）
+├── css/app.css           # 共享设计系统（纸墨浅色风，移动优先）
 ├── js/                   # 纯前端运行所需（部署仅需此目录 + 上述 HTML + css/）
 │   ├── lunar.js          # 农历/八字换算库（lunar-javascript）
 │   ├── db-data.js        # 由 DB/*.csv 导出的数据（window.TIEBAN_DB）
 │   ├── tieban.js         # 核心算法（由 main.py 移植）
-│   └── duanyu-modern.js  # 断语现代白话对照（10719 条）
+│   ├── duanyu-modern.js  # 断语现代白话对照（10719 条）
+│   └── terms.js          # 排盘术语白话解释字典（window.TIEBAN_TERMS）
 ├── tools/build.js        # 发布构建：混淆 + 压缩
 ├── docs/                 # 项目文档
 │
@@ -91,6 +92,11 @@ python server.py          # 访问 http://127.0.0.1:8000
 JS 输出经逐项校验与 Python 参照实现一致（八字换算 1300+ 例、完整排盘结果 170+ 例）。
 
 ## 更新日志
+
+### v4.0
+- 界面**彻底重设计**为浅色「纸墨」现代 App 风（暖纸底 + 白卡片 + 朱砂点缀，系统字体），解决深色主题与移动端原生控件冲突、衬线字体安卓回退发虚等问题
+- 结果页新交互：吸顶锚点导航、本命卦 Hero 概览、流年「三种条文怎么看」引导
+- **基础排盘所有参数可点击查看白话解释**（新增 `js/terms.js` 术语字典，20 词条）；完整报告页每参数附白话微注 + 名词白话对照表
 
 ### v3.2
 - 前端整体重设计为**移动优先的现代国风**（深墨底 + 酱金，大字号、大触控区、卡片化）

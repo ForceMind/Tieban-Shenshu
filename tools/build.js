@@ -70,7 +70,7 @@ async function main() {
     obfuscateCode(fs.readFileSync(path.join(SRC, 'js/tieban.js'), 'utf-8'), true));
 
   // 2) 库 + 数据：压缩
-  for (const f of ['js/lunar.js', 'js/db-data.js', 'js/duanyu-modern.js']) {
+  for (const f of ['js/lunar.js', 'js/db-data.js', 'js/duanyu-modern.js', 'js/terms.js']) {
     fs.writeFileSync(path.join(DIST, f), await minifyJs(fs.readFileSync(path.join(SRC, f), 'utf-8')));
   }
 

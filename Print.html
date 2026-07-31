@@ -3,223 +3,104 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#F6F3EC">
   <title>铁板神数 · 完整报告</title>
   <link rel="stylesheet" href="css/app.css">
   <style>
-    /* ===== 完整报告页特有样式（屏幕：现代国风深色；打印：白底黑字）===== */
-
-    /* 报告版：容器放宽，一次性完整展开 */
+    /* ---------- 页面特有样式（其余复用 css/app.css v2） ---------- */
     .app { max-width: 900px; }
 
-    /* 顶部操作栏在屏幕上吸顶感 */
-    .report-actions { margin: 16px 0 8px; }
+    /* 报告版：参数卡不做点击交互 */
+    .stat { cursor: default; }
 
-    /* 流年整表：紧凑、始终展开、去掉 chevron */
-    .year-list { gap: 8px; }
-    .year-card__summary { padding: 10px 14px; align-items: baseline; }
-    .year-card__age b { font-size: 18px; }
-    .year-card__detail { display: block; padding: 0 14px 12px; }
-    .year-card__lead { font-size: 12px; }
+    /* 报告版：流年卡始终展开 */
+    .year-card__summary { cursor: default; }
+    .year-card__detail { display: block; }
 
-    /* 校正后条文（主判读）视觉突出 */
-    .tw--primary {
-      background: rgba(201, 162, 75, .06);
-      border-left: 3px solid var(--gold);
-      border-radius: 8px;
-      padding: 10px 12px;
-      margin: 6px 0;
+    /* 名词白话对照：释义左对齐、可读性 */
+    .gloss-title {
+      font-size: 13px; font-weight: 700; color: var(--ink-2);
+      margin: 16px 0 4px; padding-top: 12px; border-top: 1px dashed var(--line-strong);
     }
-    .tw--primary .tw__label { color: var(--gold-bright); }
-    .tw__badge {
-      display: inline-block; font-size: 10px; letter-spacing: .1em;
-      color: #241d10; background: linear-gradient(180deg, var(--gold-bright), var(--gold));
-      border-radius: var(--radius-pill); padding: 1px 8px; margin-left: 8px; font-weight: 700;
+    .gloss .kv__k { font-weight: 600; color: var(--ink); min-width: 5em; }
+    .gloss .kv__v { text-align: left; color: var(--ink-2); font-size: 13px; line-height: 1.7; }
+
+    .placeholder { text-align: center; color: var(--ink-3); font-size: 14px; padding: 22px 8px; line-height: 1.7; }
+    .placeholder small { display: block; font-size: 12px; margin-top: 8px; }
+
+    .section-title { font-size: 16px; font-weight: 700; margin: 20px 4px 8px; }
+
+    /* 宽屏下参数格三列更紧凑 */
+    @media (min-width: 700px) {
+      .stat-grid { grid-template-columns: repeat(3, 1fr); }
     }
 
-    /* 本命条文里补充计算式的小注 */
-    .duanyu-item__calc { font-size: 11px; color: var(--text-mute); margin-left: 8px; }
-
-    /* 空数据提示 */
-    .empty { text-align: center; color: var(--text-dim); padding: 28px 12px; font-size: 14px; }
-    .empty small { display: block; color: var(--text-mute); font-size: 12px; margin-top: 6px; }
-
-    /* 报告小标（每岁条文分组之上不需要，但流年段落标题用 section-title 已够） */
-
-    /* ============================================================
-       打印优化：白底黑字、去阴影/渐变、隐藏交互、避免切断
-       ============================================================ */
+    /* ---------- 打印精修 ---------- */
+    @page { size: A4; margin: 12mm; }
     @media print {
-      @page { size: A4; margin: 12mm; }
-
-      html, body {
-        background: #fff !important;
-        color: #222 !important;
-        font-size: 11px !important;
-        line-height: 1.4 !important;
-      }
-      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-
-      .app { max-width: none; width: 100%; margin: 0; padding: 0; }
-
-      /* 隐藏所有交互 / 按钮 */
       .no-print { display: none !important; }
-
-      /* 品牌头：保留但改深色，去渐变文字填充 */
-      .brand { padding: 0 0 8px; }
-      .brand__mark { color: #8b6f2e; font-size: 16px; }
-      .brand__title {
-        font-size: 24px !important;
-        -webkit-text-fill-color: #7a5a1f !important;
-        color: #7a5a1f !important;
-        background: none !important;
+      body { font-size: 11px; background: #fff; }
+      .app { max-width: none; padding: 0; }
+      .card, .year-card, .tw, .stat, .duanyu-item { break-inside: avoid; }
+      .card, .year-card, .brand__seal { box-shadow: none; }
+      .stat-grid { grid-template-columns: repeat(4, 1fr); }
+      .vernacular, .tw--main {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
       }
-      .brand__sub { color: #666; }
-      .brand__rule { background: #b89544; }
-
-      /* 面板：白底细边、无阴影 */
-      .panel {
-        background: #fff !important;
-        border: 1px solid #d9c48a !important;
-        box-shadow: none !important;
-        border-radius: 6px;
-        padding: 10px 12px;
-        margin: 8px 0;
-        break-inside: avoid;
-      }
-      .panel__title { color: #7a5a1f !important; font-size: 13px; margin-bottom: 8px; }
-      .panel__title::before { background: #b89544 !important; }
-      .section-title { color: #7a5a1f !important; font-size: 15px; margin: 14px 0 6px; break-after: avoid; }
-
-      /* 统计格 */
-      .stat-grid { grid-template-columns: repeat(4, 1fr); gap: 6px; }
-      .stat { background: #fbf8ef !important; border: 1px solid #e2d3a3 !important; padding: 6px 8px; }
-      .stat__label { color: #666 !important; font-size: 10px; }
-      .stat__value, .stat__value--gold { color: #7a5a1f !important; font-size: 15px; }
-      .stat__note { color: #888 !important; }
-
-      /* 键值行 */
-      .kv { padding: 4px 0; border-bottom: 1px dashed #ddcfa0 !important; }
-      .kv__k { color: #555 !important; }
-      .kv__v { color: #222 !important; }
-
-      /* 卦象 */
-      .gua__glyph { color: #7a5a1f !important; font-size: 26px; }
-      .gua__name { color: #7a5a1f !important; }
-      .gua__tag { color: #666 !important; }
-
-      /* 本命条文 */
-      .duanyu-item { border-bottom: 1px solid #e2d3a3 !important; padding: 6px 0; break-inside: avoid; }
-      .duanyu-item__cat { color: #7a5a1f !important; }
-      .duanyu-item__num, .duanyu-item__calc { color: #888 !important; }
-      .duanyu-item__text { color: #222 !important; font-size: 12px; }
-      .vernacular { color: #2e6b39 !important; border-left-color: #8bbf95 !important; font-size: 11px; }
-
-      /* 流年卡片：白底、避免被分页切断、省纸 */
-      .year-list { gap: 5px; }
-      .year-card {
-        background: #fff !important;
-        border: 1px solid #e2d3a3 !important;
-        border-radius: 5px;
-        break-inside: avoid;
-        page-break-inside: avoid;
-      }
-      .year-card__summary { padding: 5px 10px; }
-      .year-card__age b { color: #7a5a1f !important; font-size: 13px; }
-      .year-card__age span { color: #888 !important; }
-      .year-card__gz { color: #7a5a1f !important; font-size: 13px; }
-      .year-card__lead { color: #555 !important; font-size: 10px; }
-      .year-card__detail { border-top: 1px solid #e2d3a3 !important; padding: 0 10px 6px; }
-
-      .tw { padding: 5px 0; border-bottom: 1px dashed #e2d3a3 !important; break-inside: avoid; }
-      .tw__label { color: #7a5a1f !important; }
-      .tw__num { color: #888 !important; }
-      .tw__text { color: #222 !important; font-size: 11px; }
-      .chip { color: #555 !important; background: #fbf8ef !important; border: 1px solid #e2d3a3 !important; }
-
-      .tw--primary {
-        background: #fbf6e6 !important;
-        border-left: 3px solid #b89544 !important;
-      }
-      .tw--primary .tw__label { color: #7a5a1f !important; }
-      .tw__badge { background: #b89544 !important; color: #fff !important; }
-
-      .foot { display: none !important; }
     }
   </style>
 </head>
 <body>
   <div class="app">
     <div class="brand">
-      <div class="brand__mark">☰</div>
-      <div class="brand__title">铁板神数</div>
-      <div class="brand__sub">先天考刻 · 完整报告</div>
-      <div class="brand__rule"></div>
+      <div class="brand__seal">铁</div>
+      <div>
+        <div class="brand__name">铁板神数</div>
+        <div class="brand__tag">先天考刻 · 完整报告</div>
+      </div>
     </div>
 
-    <!-- 顶部操作栏（打印时隐藏） -->
-    <div class="actions no-print report-actions">
-      <button class="btn btn--primary" type="button" id="btnPrint">打印报告</button>
-      <button class="btn btn--ghost" type="button" id="btnBack">返回重排</button>
+    <div class="actions no-print">
+      <button type="button" class="btn btn--primary" id="btnPrint">打印报告</button>
+      <button type="button" class="btn btn--ghost" id="btnBack">返回重排</button>
     </div>
 
-    <!-- 加载态 -->
-    <div class="loading no-print" id="loadingState">
-      <div class="spinner"></div>
-      <div>正在载入完整报告…</div>
-    </div>
-
-    <!-- 报告主体 -->
-    <div id="reportContent" style="display:none;">
-      <!-- 输入信息 -->
-      <div class="panel">
-        <div class="panel__title">输入信息</div>
-        <div id="inputInfo"></div>
+    <div id="root">
+      <div class="loading">
+        <div class="spinner"></div>
+        <div>正在生成完整报告…</div>
       </div>
-
-      <!-- 基础排盘 -->
-      <div class="panel">
-        <div class="panel__title">基础排盘</div>
-        <div class="stat-grid" id="basicGrid"></div>
-      </div>
-
-      <!-- 卦象 -->
-      <div class="panel">
-        <div class="panel__title">卦象</div>
-        <div class="gua" id="guaDisplay"></div>
-      </div>
-
-      <!-- 本命条文 -->
-      <div class="panel">
-        <div class="panel__title">本命条文</div>
-        <div id="destinyTiaowen"></div>
-      </div>
-
-      <!-- 流年 1-108 岁 -->
-      <div class="section-title">流年推演 · 1–108 岁</div>
-      <div class="year-list" id="liunianList"></div>
     </div>
 
     <div class="foot no-print">仅供传统文化研习与娱乐，不构成任何决策依据。</div>
   </div>
 
-  <!-- 断语现代白话对照表 -->
+  <script src="js/terms.js"></script>
   <script src="js/duanyu-modern.js"></script>
   <script>
-    // 取文言断语对应的现代白话；无对应或空则返回空串
+    // ---------- 工具 ----------
+    function esc(v) { return (v === null || v === undefined) ? '' : v; }
+
     function modernOf(t) {
-      if (!t || t === '未找到断语') return '';
+      if (!t || t === '未找到断语' || t === '—') return '';
       return (window.DUANYU_MODERN || {})[t] || '';
     }
-
-    // 简单 HTML 转义，兜底防止断语中的特殊字符破坏结构
-    function esc(s) {
-      if (s === undefined || s === null) return '';
-      return String(s).replace(/[&<>"]/g, function (c) {
-        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
-      });
+    function vernacularHtml(t) {
+      var m = modernOf(t);
+      return m ? '<div class="vernacular">' + m + '</div>' : '';
     }
 
-    // 卦象：单符号（代表一卦三爻）
+    function termShort(name) {
+      var t = (window.TIEBAN_TERMS || {})[name];
+      return (t && t.short) || '';
+    }
+    function termDetail(name) {
+      var t = (window.TIEBAN_TERMS || {})[name];
+      return (t && t.detail) || '';
+    }
+
+    // ---------- 卦象映射 ----------
     var guaMap = {
       "乾": { lines: "☰", element: "金" },
       "坤": { lines: "☷", element: "土" },
@@ -230,8 +111,6 @@
       "艮": { lines: "☶", element: "土" },
       "兑": { lines: "☱", element: "金" }
     };
-
-    // 十二辟卦组成（上卦 + 下卦）
     var twelveHexMap = {
       "乾": { shang: "乾", xia: "乾" },
       "夬": { shang: "兑", xia: "乾" },
@@ -247,173 +126,148 @@
       "姤": { shang: "乾", xia: "巽" }
     };
 
-    // ---------- 操作栏 ----------
-    document.getElementById('btnPrint').addEventListener('click', function () { window.print(); });
-    document.getElementById('btnBack').addEventListener('click', function () { returnToIndex(); });
-
-    function returnToIndex() {
-      try {
-        var resultStr = localStorage.getItem('tiebanshushu_result');
-        if (resultStr) {
-          var data = JSON.parse(resultStr);
-          var formData = {
-            gender: data.gender,
-            birth: (data.birth_info && data.birth_info.birth_dt) || {},
-            query: (data.query_info && data.query_info.query_dt) || {}
-          };
-          localStorage.setItem('tiebanshushu_form', JSON.stringify(formData));
-        }
-      } catch (e) { /* ignore */ }
-      window.location.href = 'index.html';
-    }
-
-    // ---------- 初始化 ----------
-    document.addEventListener('DOMContentLoaded', function () {
-      var resultStr = localStorage.getItem('tiebanshushu_result');
-      if (!resultStr) { window.location.href = 'index.html'; return; }
-
-      var data;
-      try { data = JSON.parse(resultStr); }
-      catch (e) { window.location.href = 'index.html'; return; }
-
-      if (!data || !data.success) { window.location.href = 'index.html'; return; }
-
-      try {
-        renderInputInfo(data);
-        renderBasicGrid(data.result || {});
-        renderGua((data.result && data.result.hex_name) || '');
-        renderDestiny(data.result || {});
-        var birthYear = parseInt((data.info_b && data.info_b.date_str) || '', 10);
-        renderLiunian((data.result && data.result.liunian) || [], birthYear);
-      } catch (e) {
-        console.error('渲染失败:', e);
-      }
-
-      document.getElementById('loadingState').style.display = 'none';
-      document.getElementById('reportContent').style.display = 'block';
-    });
-
     // ---------- 输入信息 ----------
-    function renderInputInfo(data) {
+    function renderInfo(data) {
       var b = data.info_b || {};
       var q = data.info_q || {};
       var bz = b.bazi || {};
       var qz = q.bazi || {};
       var rows = [
-        ['性别', esc(data.gender || '')],
-        ['出生公历', esc(b.date_str || '')],
-        ['农历', esc(b.lunar_str || '')],
+        ['性别', esc(data.gender)],
+        ['出生（公历）', esc(b.date_str)],
+        ['农历', esc(b.lunar_str)],
         ['闰月', b.is_leap ? '是' : '否'],
-        ['出生八字', esc([bz.year, bz.month, bz.day, bz.time].filter(Boolean).join(' '))],
-        ['求测公历', esc(q.date_str || '')],
-        ['求测八字', esc([qz.year, qz.month, qz.day, qz.time].filter(Boolean).join(' '))]
+        ['出生八字', [bz.year, bz.month, bz.day, bz.time].map(esc).join(' ')],
+        ['求测（公历）', esc(q.date_str)],
+        ['求测八字', [qz.year, qz.month, qz.day, qz.time].map(esc).join(' ')]
       ];
-      document.getElementById('inputInfo').innerHTML = rows.map(function (r) {
-        return '<div class="kv"><span class="kv__k">' + r[0] + '</span><span class="kv__v">' + r[1] + '</span></div>';
-      }).join('');
+      var html = '<div class="card"><div class="card__title">输入信息</div>';
+      rows.forEach(function (r) {
+        html += '<div class="kv"><span class="kv__k">' + r[0] + '</span><span class="kv__v">' + r[1] + '</span></div>';
+      });
+      html += '</div>';
+      return html;
     }
 
     // ---------- 基础排盘 ----------
-    function statCell(label, value, opts) {
-      opts = opts || {};
-      var cls = 'stat' + (opts.wide ? ' stat--wide' : '');
-      var vcls = 'stat__value' + (opts.gold ? ' stat__value--gold' : '');
-      var note = opts.note ? '<div class="stat__note">' + opts.note + '</div>' : '';
-      return '<div class="' + cls + '"><div class="stat__label">' + label +
-        '</div><div class="' + vcls + '">' + value + '</div>' + note + '</div>';
-    }
-
-    function renderBasicGrid(result) {
+    function renderBasic(result) {
       var dlc = result.day_life_calc || '';
-      var dm = dlc.match(/日命:(\d+)/);
-      var tm = dlc.match(/时运:(\d+)/);
-      var dayLife = dm ? dm[1] : '—';
-      var timeLuck = tm ? tm[1] : '—';
+      var dayM = dlc.match(/日命:(\d+)/);
+      var timeM = dlc.match(/时运:(\d+)/);
+      var dayLife = dayM ? dayM[1] : '—';
+      var timeLuck = timeM ? timeM[1] : '—';
 
-      var html = '';
-      html += statCell('先天命数', esc(result.cong_num != null ? result.cong_num : '—'));
-      html += statCell('五音命数', esc(result.tone_num != null ? result.tone_num : '—'));
-      html += statCell('日命数', esc(dayLife));
-      html += statCell('时运数', esc(timeLuck));
-      html += statCell('刻别', esc(result.moment_cn || '—'), { gold: true });
-      html += statCell('本命数', esc(result.main_num != null ? result.main_num : '—'));
-      html += statCell('十二辟卦', esc(result.hex_name || '—'), { gold: true });
-      html += statCell('后天命数', esc(result.pn_num != null ? result.pn_num : '—'));
-      if (result.san_yuan) {
-        html += statCell('三元九运', esc(result.san_yuan));
+      var usedTerms = [];
+
+      function stat(name, value, accent) {
+        usedTerms.push(name);
+        var vClass = 'stat__value' + (accent ? ' stat__value--accent' : '');
+        var h = '<div class="stat"><div class="stat__label">' + name + '</div>';
+        h += '<div class="' + vClass + '">' + esc(value) + '</div>';
+        var s = termShort(name);
+        if (s) h += '<div class="stat__note">' + s + '</div>';
+        h += '</div>';
+        return h;
       }
 
+      var html = '<div class="card"><div class="card__title">基础排盘 <small>每项附一句白话微注</small></div><div class="stat-grid">';
+      html += stat('先天命数', result.cong_num);
+      html += stat('五音命数', result.tone_num);
+      html += stat('日命数', dayLife);
+      html += stat('时运数', timeLuck);
+      html += stat('刻别', result.moment_cn);
+      html += stat('本命数', result.main_num);
+      html += stat('十二辟卦', result.hex_name, true);
+      html += stat('后天命数', result.pn_num);
+      if (result.san_yuan) html += stat('三元九运', result.san_yuan);
+      html += stat('终局条文数', result.final_fortune_num, true);
+
+      // 五数寄宫（宽）
       if (result.wu_shu_ji_gong) {
+        usedTerms.push('五数寄宫');
         var w = result.wu_shu_ji_gong;
-        var v = esc(w.original) + ' → ' + esc(w['寄宫卦']) + ' → ' + esc(w['实际命数']);
-        html += statCell('五数寄宫', v, { wide: true, note: '依据：' + esc(w['依据'] || '') });
+        html += '<div class="stat stat--wide"><div class="stat__label">五数寄宫</div>';
+        html += '<div class="stat__value" style="font-size:16px;">' +
+          esc(w.original) + ' → ' + esc(w['寄宫卦']) + ' → ' + esc(w['实际命数']) + '</div>';
+        html += '<div class="stat__note">' + termShort('五数寄宫') +
+          (w['依据'] ? ' ｜ 依据：' + esc(w['依据']) : '') + '</div>';
+        html += '</div>';
       }
 
+      // 八卦加则（宽）
       if (result.bagua_jiaze) {
+        usedTerms.push('八卦加则');
         var j = result.bagua_jiaze;
-        html += statCell('八卦加则', esc(j['卦名'] || '') + ' ｜ 起始 ' + esc(j['起始数'] != null ? j['起始数'] : ''),
-          { wide: true, note: esc(j['规则'] || '') });
+        html += '<div class="stat stat--wide"><div class="stat__label">八卦加则</div>';
+        html += '<div class="stat__value" style="font-size:16px;">' +
+          esc(j['卦名']) + ' ｜ 起始 ' + esc(j['起始数']) + '</div>';
+        html += '<div class="stat__note">' + termShort('八卦加则') +
+          (j['规则'] ? ' ｜ ' + esc(j['规则']) : '') + '</div>';
+        html += '</div>';
       }
 
-      document.getElementById('basicGrid').innerHTML = html;
+      html += '</div>'; // stat-grid
+
+      // 名词白话对照（供打印读者查全称解释）
+      html += '<div class="gloss-title">名词白话对照</div><div class="gloss">';
+      usedTerms.forEach(function (name) {
+        var d = termDetail(name);
+        if (!d) return;
+        html += '<div class="kv"><span class="kv__k">' + name + '</span>' +
+          '<span class="kv__v">' + d + '</span></div>';
+      });
+      html += '</div>';
+
+      html += '</div>'; // card
+      return html;
     }
 
     // ---------- 卦象 ----------
     function renderGua(hexName) {
+      hexName = hexName || '';
       var shangName = '乾', xiaName = '坤';
       if (twelveHexMap[hexName]) {
         shangName = twelveHexMap[hexName].shang;
         xiaName = twelveHexMap[hexName].xia;
-      } else if (hexName) {
+      } else {
         for (var name in guaMap) {
           if (hexName.indexOf(name) === 0) shangName = name;
-          if (hexName.length >= name.length &&
-              hexName.lastIndexOf(name) === hexName.length - name.length) xiaName = name;
+          if (hexName.length >= name.length && hexName.lastIndexOf(name) === hexName.length - name.length) xiaName = name;
         }
       }
       var sg = guaMap[shangName] || guaMap['乾'];
       var xg = guaMap[xiaName] || guaMap['坤'];
 
-      document.getElementById('guaDisplay').innerHTML =
-        '<div class="gua__col">' +
-          '<div class="gua__glyph">' + sg.lines + '</div>' +
-          '<div class="gua__name">' + esc(shangName) + '</div>' +
-          '<div class="gua__tag">上卦 · ' + esc(sg.element) + '</div>' +
-        '</div>' +
-        '<div class="gua__col gua__main">' +
-          '<div class="gua__glyph">☯</div>' +
-          '<div class="gua__name">' + esc(hexName || '—') + '</div>' +
-          '<div class="gua__tag">本卦 · ' + esc(shangName) + '+' + esc(xiaName) + '</div>' +
-        '</div>' +
-        '<div class="gua__col">' +
-          '<div class="gua__glyph">' + xg.lines + '</div>' +
-          '<div class="gua__name">' + esc(xiaName) + '</div>' +
-          '<div class="gua__tag">下卦 · ' + esc(xg.element) + '</div>' +
-        '</div>';
+      var html = '<div class="card"><div class="card__title">卦象 <small>' + termShort('卦象') + '</small></div><div class="gua">';
+      html += '<div class="gua__col"><div class="gua__glyph">' + sg.lines + '</div>' +
+        '<div class="gua__name">' + shangName + '</div><div class="gua__tag">上卦 · ' + sg.element + '</div></div>';
+      html += '<div class="gua__col gua__main"><div class="gua__glyph" style="opacity:.35;">☯</div>' +
+        '<div class="gua__name">' + esc(hexName) + '</div><div class="gua__tag">本卦</div></div>';
+      html += '<div class="gua__col"><div class="gua__glyph">' + xg.lines + '</div>' +
+        '<div class="gua__name">' + xiaName + '</div><div class="gua__tag">下卦 · ' + xg.element + '</div></div>';
+      html += '</div></div>';
+      return html;
     }
 
     // ---------- 本命条文 ----------
     function renderDestiny(result) {
-      var container = document.getElementById('destinyTiaowen');
       var tbl = result.tbl_data;
+      var html = '<div class="card"><div class="card__title">本命条文</div>';
 
       if (!tbl || !tbl.offsets) {
-        container.innerHTML = '<div class="empty">暂无本命条文数据' +
-          '<small>十二辟卦：' + esc(result.hex_name || '未知') +
-          ' ｜ 刻别：' + esc(result.moment_cn || '未知') +
-          ' ｜ 先天命数：' + esc(result.cong_num != null ? result.cong_num : '未知') + '</small>' +
-          '<small>注：并非所有命数组合都有对应的本命条文记录</small></div>';
-        return;
+        html += '<div class="placeholder">暂无本命条文数据' +
+          '<small>十二辟卦：' + esc(result.hex_name) + ' ｜ 刻别：' + esc(result.moment_cn) +
+          ' ｜ 先天命数：' + esc(result.cong_num) + '</small>' +
+          '<small>注：并非所有命数组合都有对应的本命条文记录</small></div></div>';
+        return html;
       }
 
-      var base = tbl.base || 0;
-      var seq = tbl.seq || 0;
       var categories = ['性格', '才能前程', '财运', '兄弟个数'];
-      var html = '';
+      var base = tbl.base || 0, seq = tbl.seq || 0;
       var hasData = false;
 
       categories.forEach(function (cat) {
-        var offsets = tbl.offsets[cat] || [];
+        var offsets = (tbl.offsets && tbl.offsets[cat]) || [];
         var duanyus = (tbl.duanyus && tbl.duanyus[cat]) || [];
         if (!offsets.length) return;
         hasData = true;
@@ -421,88 +275,137 @@
           var fortune = base + seq + off;
           var info = duanyus[idx] || {};
           var duanyu = info.duanyu || '未找到断语';
-          var v = modernOf(duanyu);
-          html += '<div class="duanyu-item">' +
-            '<div class="duanyu-item__head">' +
-              '<span class="duanyu-item__cat">' + esc(idx === 0 ? cat : '') + '</span>' +
-              '<span class="duanyu-item__num">条文 ' + esc(fortune) + '</span>' +
-              '<span class="duanyu-item__calc">' + esc(base) + '+' + esc(seq) + '+' + esc(off) + '</span>' +
-            '</div>' +
-            '<div class="duanyu-item__text">' + esc(duanyu) + '</div>' +
-            (v ? '<div class="vernacular">' + esc(v) + '</div>' : '') +
-          '</div>';
+          html += '<div class="duanyu-item">';
+          html += '<div class="duanyu-item__head"><span class="duanyu-item__cat">' + cat + '</span>' +
+            '<span class="duanyu-item__num">条文 ' + fortune + '</span></div>';
+          html += '<div class="duanyu-item__text">' + duanyu + '</div>';
+          html += vernacularHtml(duanyu);
+          html += '</div>';
         });
       });
 
-      container.innerHTML = hasData ? html : '<div class="empty">本命条文各属性暂无偏移数据</div>';
+      if (!hasData) html += '<div class="placeholder">本命条文各属性暂无偏移数据</div>';
+      html += '</div>';
+      return html;
     }
 
-    // ---------- 流年 1-108 岁（全量、始终展开）----------
-    function twBlock(label, fortune, duanyu, ageInfo, opts) {
-      opts = opts || {};
-      duanyu = duanyu || '未找到断语';
-      var v = modernOf(duanyu);
-      var cls = 'tw' + (opts.primary ? ' tw--primary' : '');
-      var badge = opts.primary ? '<span class="tw__badge">主判读</span>' : '';
-      var meta = '';
+    // ---------- 流年 ----------
+    function truncate(s, n) {
+      s = s || '';
+      return s.length > n ? s.slice(0, n) + '…' : s;
+    }
+
+    function twBlock(label, num, text, isMain) {
+      text = text || '未找到断语';
+      var cls = 'tw' + (isMain ? ' tw--main' : '');
+      var h = '<div class="' + cls + '">';
+      h += '<div class="tw__label">' + label +
+        (isMain ? '<span class="tw__badge">主判读</span>' : '') +
+        (num !== undefined && num !== null && num !== '' ? '<span class="tw__num">条文 ' + num + '</span>' : '') +
+        '</div>';
+      h += '<div class="tw__text">' + text + '</div>';
+      h += vernacularHtml(text);
+      h += '</div>';
+      return h;
+    }
+
+    function metaChips(item) {
       var chips = [];
-      if (ageInfo) chips.push('对应年龄 ' + esc(ageInfo));
-      if (opts.formula) chips.push('公式 ' + esc(opts.formula));
-      if (chips.length) {
-        meta = '<div class="tw__meta">' + chips.map(function (c) {
-          return '<span class="chip">' + c + '</span>';
-        }).join('') + '</div>';
-      }
-      return '<div class="' + cls + '">' +
-        '<div><span class="tw__label">' + label + '</span>' +
-          '<span class="tw__num">条文 ' + esc(fortune != null && fortune !== '' ? fortune : '—') + '</span>' + badge +
-        '</div>' +
-        '<div class="tw__text">' + esc(duanyu) + '</div>' +
-        (v ? '<div class="vernacular">' + esc(v) + '</div>' : '') +
-        meta +
-      '</div>';
+      if (item.sound) chips.push('五音 ' + item.sound);
+      if (item.marker) chips.push('标记 ' + item.marker);
+      if (item.letter) chips.push('字母 ' + item.letter);
+      if (item.corrected_correction !== undefined && item.corrected_correction !== null && item.corrected_correction !== '')
+        chips.push('校正数 ' + item.corrected_correction);
+      if (item.jiaze_result) chips.push('八卦加则 ' + item.jiaze_result);
+      if (!chips.length) return '';
+      var h = '<div class="tw__meta">';
+      chips.forEach(function (c) { h += '<span class="chip">' + c + '</span>'; });
+      h += '</div>';
+      return h;
+    }
+
+    function renderHowto() {
+      return '<div class="howto">' +
+        '<b>三种条文怎么看？</b>每一岁给出三层判读：' +
+        '「原条文」（' + termShort('原条文') + '）——' + termDetail('原条文') +
+        '<b>「校正后条文」是主判读，一般以它为准</b>——' + termDetail('校正后条文') +
+        '「铁板公式」（' + termShort('铁板公式') + '）——' + termDetail('铁板公式') +
+        '</div>';
     }
 
     function renderLiunian(liunian, birthYear) {
-      var container = document.getElementById('liunianList');
+      var html = '<div class="section-title">流年条文 · 1—108 岁</div>';
+      html += renderHowto();
+
       if (!liunian || !liunian.length) {
-        container.innerHTML = '<div class="empty">暂无流年数据</div>';
-        return;
+        html += '<div class="card"><div class="placeholder">暂无流年数据</div></div>';
+        return html;
       }
 
-      // 覆盖 1-108 岁全部
-      var list = liunian.filter(function (it) { return it && it.age >= 1 && it.age <= 108; });
-      list.sort(function (a, b) { return a.age - b.age; });
+      html += '<div class="year-list">';
+      liunian.forEach(function (item) {
+        var age = item.age || '';
+        var gYear = (birthYear && age) ? (birthYear + age - 1) : '';
+        var lead = truncate(item.corrected_duanyu || item.original_duanyu || '', 34);
 
-      var html = list.map(function (it) {
-        var gregYear = (birthYear && !isNaN(birthYear)) ? (birthYear + it.age - 1) : '';
-        var leadParts = [];
-        if (it.sound) leadParts.push('五音 ' + esc(it.sound));
-        if (it.marker) leadParts.push('标记 ' + esc(it.marker));
-        if (it.letter) leadParts.push('字母 ' + esc(it.letter) +
-          (it.corrected_letter && it.corrected_letter !== it.letter ? '→' + esc(it.corrected_letter) : ''));
-        var lead = leadParts.join(' · ');
+        html += '<div class="year-card">';
 
-        var detail = '';
-        // 校正后条文 —— 主判读，突出
-        detail += twBlock('校正后条文', it.corrected_fortune, it.corrected_duanyu, it.corrected_duanyu_age, { primary: true });
-        // 原条文
-        detail += twBlock('原条文', it.original_fortune, it.original_duanyu, it.original_duanyu_age, {});
-        // 铁板公式
-        detail += twBlock('铁板公式', it.tieban_fortune, it.tieban_duanyu, it.tieban_duanyu_age, { formula: '基数+刻干×48' });
+        // summary（岁 / 公历年 / 干支 / 主断语）
+        html += '<div class="year-card__summary">';
+        html += '<div class="year-card__age"><b>' + age + '岁</b><span>' + gYear + '</span></div>';
+        html += '<div class="year-card__gz">' + esc(item.year) + '</div>';
+        html += '<div class="year-card__lead">' + (lead || '—') + '</div>';
+        html += '</div>';
 
-        return '<div class="year-card is-open">' +
-          '<div class="year-card__summary">' +
-            '<div class="year-card__age"><b>' + esc(it.age) + '</b><span>' + esc(gregYear) + '</span></div>' +
-            '<div class="year-card__gz">' + esc(it.year || '') + '</div>' +
-            '<div class="year-card__lead">' + lead + '</div>' +
-          '</div>' +
-          '<div class="year-card__detail">' + detail + '</div>' +
-        '</div>';
-      }).join('');
+        // detail（报告版始终展开）
+        html += '<div class="year-card__detail">';
+        html += twBlock('原条文', item.original_fortune, item.original_duanyu, false);
+        html += twBlock('校正后条文', item.corrected_fortune, item.corrected_duanyu, true);
+        html += twBlock('铁板公式', item.tieban_fortune, item.tieban_duanyu, false);
+        html += metaChips(item);
+        html += '</div>';
 
-      container.innerHTML = html;
+        html += '</div>'; // year-card
+      });
+      html += '</div>'; // year-list
+
+      return html;
     }
+
+    // ---------- 错误 ----------
+    function renderError(msg) {
+      document.getElementById('root').innerHTML =
+        '<div class="card"><div class="placeholder" style="color:var(--cinnabar);">报告生成失败' +
+        '<small>' + esc(msg) + '</small></div>' +
+        '<button class="btn btn--primary" onclick="location.href=\'index.html\'">返回首页</button></div>';
+    }
+
+    // ---------- 入口 ----------
+    (function init() {
+      document.getElementById('btnPrint').addEventListener('click', function () { window.print(); });
+      document.getElementById('btnBack').addEventListener('click', function () { location.href = 'index.html'; });
+
+      var resultStr = localStorage.getItem('tiebanshushu_result');
+      if (!resultStr) { location.href = 'index.html'; return; }
+
+      var data;
+      try { data = JSON.parse(resultStr); }
+      catch (e) { renderError('数据解析失败'); return; }
+
+      if (!data || !data.success) { renderError((data && data.error) || '未知错误'); return; }
+
+      var result = data.result || {};
+      var birthYear = parseInt((data.info_b && data.info_b.date_str) || '', 10) || 0;
+
+      var html = '';
+      html += renderInfo(data);
+      html += renderBasic(result);
+      html += renderGua(result.hex_name);
+      html += renderDestiny(result);
+      html += renderLiunian(result.liunian, birthYear);
+
+      document.getElementById('root').innerHTML = html;
+    })();
   </script>
 </body>
 </html>
